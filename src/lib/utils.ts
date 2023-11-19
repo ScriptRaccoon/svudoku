@@ -1,15 +1,9 @@
-/**
- * checks if the board is valid in a given position
- * @param row row
- * @param col column
- * @param board sudoku board
- */
 export function is_valid(
 	row: number,
 	col: number,
+	num: number,
 	board: board
 ): boolean {
-	const num = board[row][col]
 	if (num === 0) {
 		return true
 	}
@@ -37,13 +31,6 @@ export function is_valid(
 
 	return true
 }
-
-/**
- * converts a number to the displayed string in the grid
- * @param value any number
- * @returns an empty string if the number is 0,
- * otherwise the number converted a string
- */
 
 export function display_value(value: number): string {
 	return value == 0 ? "" : value.toString()

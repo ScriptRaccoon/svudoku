@@ -21,7 +21,12 @@
 						<Square
 							bind:value={board[row][col]}
 							fixed={original_board[row][col] >= 1}
-							valid={is_valid(row, col, board)}
+							valid={is_valid(
+								row,
+								col,
+								board[row][col],
+								board
+							)}
 							label={`row ${row + 1}, column ${
 								col + 1
 							}`}
