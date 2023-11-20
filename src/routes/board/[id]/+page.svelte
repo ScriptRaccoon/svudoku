@@ -5,7 +5,7 @@
 	import { BOARD_COUNT } from "$lib/config"
 	import { rand_int } from "$lib/utils"
 
-	const { original, solution } = $page.data
+	const { original } = $page.data
 
 	let board = JSON.parse(JSON.stringify(original))
 
@@ -20,5 +20,5 @@
 	}
 </script>
 
-<Board bind:board {original} {solution} />
+<Board bind:board {original} />
 <Menu on:reset={reset} on:new={new_board} />

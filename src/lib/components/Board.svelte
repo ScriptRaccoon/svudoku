@@ -1,13 +1,25 @@
 <script lang="ts">
 	export let board: board
 	export let original: board
-	export let solution: board
 
 	import Square from "./Square.svelte"
 	import Popup from "./Popup.svelte"
 	import { is_valid } from "$lib/utils"
 
-	$: solved = JSON.stringify(board) == JSON.stringify(solution)
+	const coordinates: Array<[number, number]> = []
+	for (let row = 0; row < 9; row++) {
+		for (let col = 0; col < 9; col++) {
+			coordinates.push([row, col])
+		}
+	}
+
+	$: solved =
+		coordinates.length &&
+		coordinates.every(
+			([row, col]) =>
+				board[row][col] >= 1 &&
+				is_valid(row, col, board[row][col], board)
+		)
 </script>
 
 <div class="board">
