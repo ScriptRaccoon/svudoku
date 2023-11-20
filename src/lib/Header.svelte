@@ -1,5 +1,9 @@
+<script lang="ts">
+	export let title = "Sudoku"
+</script>
+
 <header>
-	<h1>Sudoku</h1>
+	<h1>{title}</h1>
 </header>
 
 <style>

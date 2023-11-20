@@ -35,3 +35,7 @@ export function is_valid(
 export function display_value(value: number): string {
 	return value == 0 ? "" : value.toString()
 }
+
+export function rand_int(a: number, b: number) {
+	return a + Math.floor((b - a) * Math.random())
+}

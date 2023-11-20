@@ -1,49 +1,16 @@
 <script lang="ts">
-	import "./app.css"
-	import Board from "$lib/Board.svelte"
-	import Header from "$lib/Header.svelte"
-	import Menu from "$lib/Menu.svelte"
+	import { BOARD_COUNT } from "$lib/config"
+	import { rand_int } from "$lib/utils"
 
-	let board: board = [
-		[5, 3, 0, 0, 7, 0, 0, 0, 0],
-		[6, 0, 0, 1, 9, 5, 0, 0, 0],
-		[0, 9, 8, 0, 0, 0, 0, 6, 0],
-		[8, 0, 0, 0, 6, 0, 0, 0, 3],
-		[4, 0, 0, 8, 0, 3, 0, 0, 1],
-		[7, 0, 0, 0, 2, 0, 0, 0, 6],
-		[0, 6, 0, 0, 0, 0, 2, 8, 0],
-		[0, 0, 0, 4, 1, 9, 0, 0, 5],
-		[0, 0, 0, 0, 8, 0, 0, 7, 9],
-	]
-
-	let solution: board = [
-		[5, 3, 4, 6, 7, 8, 9, 1, 2],
-		[6, 7, 2, 1, 9, 5, 3, 4, 8],
-		[1, 9, 8, 3, 4, 2, 5, 6, 7],
-		[8, 5, 9, 7, 6, 1, 4, 2, 3],
-		[4, 2, 6, 8, 5, 3, 7, 9, 1],
-		[7, 1, 3, 9, 2, 4, 8, 5, 6],
-		[9, 6, 1, 5, 3, 7, 2, 8, 4],
-		[2, 8, 7, 4, 1, 9, 6, 3, 5],
-		[3, 4, 5, 2, 8, 6, 1, 7, 9],
-	]
-
-	let original_board = JSON.parse(JSON.stringify(board))
-
-	function reset() {
-		board = JSON.parse(JSON.stringify(original_board))
-	}
+	const random_id = 1 + rand_int(0, BOARD_COUNT)
 </script>
 
-<svelte:head>
-	<title>Sudoku</title>
-</svelte:head>
+<section>
+	<a href="/board/{random_id}">Play random Sudoku</a>
+</section>
 
-<Header />
-
-<main>
-	{#if board}
-		<Board bind:board {original_board} {solution} />
-		<Menu on:reset={reset} />
-	{/if}
-</main>
+<style>
+	section {
+		text-align: center;
+	}
+</style>

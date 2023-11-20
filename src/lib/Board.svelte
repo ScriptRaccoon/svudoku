@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let board: board
-	export let original_board: board
+	export let original: board
 	export let solution: board
 
 	import Square from "./Square.svelte"
@@ -20,7 +20,7 @@
 						{@const col = 3 * block_col + col_offset}
 						<Square
 							bind:value={board[row][col]}
-							fixed={original_board[row][col] >= 1}
+							fixed={original[row][col] >= 1}
 							valid={is_valid(
 								row,
 								col,
