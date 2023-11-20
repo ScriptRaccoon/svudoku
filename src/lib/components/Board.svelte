@@ -5,7 +5,7 @@
 
 	import Square from "./Square.svelte"
 	import Popup from "./Popup.svelte"
-	import { is_valid } from "./utils"
+	import { is_valid } from "$lib/utils"
 
 	$: solved = JSON.stringify(board) == JSON.stringify(solution)
 </script>

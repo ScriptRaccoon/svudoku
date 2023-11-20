@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Board from "$lib/Board.svelte"
-	import Menu from "$lib/Menu.svelte"
 	import { page } from "$app/stores"
+	import Board from "$lib/components/Board.svelte"
+	import Menu from "$lib/components/Menu.svelte"
 	import { BOARD_COUNT } from "$lib/config"
 	import { rand_int } from "$lib/utils"
 

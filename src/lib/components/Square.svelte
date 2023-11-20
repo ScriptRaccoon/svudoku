@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { display_value } from "./utils"
+	import { display_value } from "$lib/utils"
 
 	export let value: number
 	export let fixed: boolean
