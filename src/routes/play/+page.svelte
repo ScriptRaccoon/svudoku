@@ -1,12 +1,10 @@
 <script lang="ts">
+	import { goto } from "$app/navigation"
 	import { page } from "$app/stores"
 	import Board from "$lib/components/Board.svelte"
 	import Menu from "$lib/components/Menu.svelte"
-	import { BOARD_COUNT } from "$lib/config"
-	import { rand_int } from "$lib/utils"
 
-	const { original } = $page.data
-
+	let original = $page.data.original
 	let board = JSON.parse(JSON.stringify(original))
 
 	function reset() {
@@ -14,9 +12,12 @@
 	}
 
 	function new_board() {
-		const id = 1 + rand_int(0, BOARD_COUNT)
-		const url = `/board/${id}`
-		window.location.href = url
+		goto("/play")
+	}
+
+	$: if ($page.data.original != original) {
+		original = $page.data.original
+		reset()
 	}
 </script>
 

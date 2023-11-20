@@ -1,3 +1,5 @@
+import { LINE_REGEXP } from "./config"
+
 export function is_valid(
 	row: number,
 	col: number,
@@ -32,10 +34,27 @@ export function is_valid(
 	return true
 }
 
+export function parse_line(line: string): number[][] | null {
+	if (!line.match(LINE_REGEXP)) return null
+	const board: number[][] = []
+	for (let row = 0; row < 9; row++) {
+		board.push([])
+		for (let col = 0; col < 9; col++) {
+			const val = line[9 * row + col]
+			board[row][col] = val === "." ? 0 : parseInt(val)
+		}
+	}
+	return board
+}
+
 export function display_value(value: number): string {
 	return value == 0 ? "" : value.toString()
 }
 
-export function rand_int(a: number, b: number) {
+export function random_int(a: number, b: number) {
 	return a + Math.floor((b - a) * Math.random())
+}
+
+export function random_element<T>(list: T[]): T {
+	return list[random_int(0, list.length)]
 }

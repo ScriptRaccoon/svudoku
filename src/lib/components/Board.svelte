@@ -7,13 +7,11 @@
 	import { is_valid } from "$lib/utils"
 	import { coordinates } from "$lib/config"
 
-	$: solved =
-		coordinates.length &&
-		coordinates.every(
-			([row, col]) =>
-				board[row][col] >= 1 &&
-				is_valid(row, col, board[row][col], board)
-		)
+	$: solved = coordinates.every(
+		([row, col]) =>
+			board[row][col] >= 1 &&
+			is_valid(row, col, board[row][col], board)
+	)
 </script>
 
 <div class="board">
