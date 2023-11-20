@@ -5,13 +5,7 @@
 	import Square from "./Square.svelte"
 	import Popup from "./Popup.svelte"
 	import { is_valid } from "$lib/utils"
-
-	const coordinates: Array<[number, number]> = []
-	for (let row = 0; row < 9; row++) {
-		for (let col = 0; col < 9; col++) {
-			coordinates.push([row, col])
-		}
-	}
+	import { coordinates } from "$lib/config"
 
 	$: solved =
 		coordinates.length &&
