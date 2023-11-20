@@ -8,7 +8,8 @@ declare global {
 		// interface Platform {}
 	}
 
-	type board = Array<Array<number>>
+	type board = number[][]
+	type pencil_board = number[][][]
 }
 
 export {}

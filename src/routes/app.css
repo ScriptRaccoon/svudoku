@@ -7,6 +7,8 @@
 :root {
 	--primary-color: rgb(63, 63, 205);
 	--error-color: rgb(187, 5, 5);
+	--square-color: #fff;
+	--lightgray-color: #eee;
 }
 
 body {
@@ -38,7 +40,13 @@ button {
 	cursor: pointer;
 }
 
-button:focus-visible {
+button:focus-visible,
+input[type="checkbox"]:focus-visible {
 	outline-offset: 0.2rem;
 	outline: 2px solid var(--primary-color);
+}
+
+input[type="checkbox"] {
+	accent-color: var(--primary-color);
+	cursor: pointer;
 }

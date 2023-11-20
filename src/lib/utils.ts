@@ -34,9 +34,9 @@ export function is_valid(
 	return true
 }
 
-export function parse_line(line: string): number[][] | null {
+export function parse_line(line: string): board | null {
 	if (!line.match(LINE_REGEXP)) return null
-	const board: number[][] = []
+	const board: board = []
 	for (let row = 0; row < 9; row++) {
 		board.push([])
 		for (let col = 0; col < 9; col++) {
@@ -57,4 +57,15 @@ export function random_int(a: number, b: number) {
 
 export function random_element<T>(list: T[]): T {
 	return list[random_int(0, list.length)]
+}
+
+export function generate_empty_pencil_board() {
+	const board: pencil_board = []
+	for (let row = 0; row < 9; row++) {
+		board.push([])
+		for (let col = 0; col < 9; col++) {
+			board[row][col] = []
+		}
+	}
+	return board
 }
