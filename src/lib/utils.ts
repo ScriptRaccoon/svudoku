@@ -69,3 +69,11 @@ export function generate_empty_pencil_board(): pencil_board {
 	}
 	return board
 }
+
+export function marks_to_str(marks: marks): string {
+	return [...marks].join("")
+}
+
+export function str_to_marks(str: string): marks {
+	return new Set(str.split("").map((e) => parseInt(e)))
+}

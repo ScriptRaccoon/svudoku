@@ -4,9 +4,13 @@
 	const dispatch = createEventDispatcher()
 
 	import clearIcon from "$lib/assets/clear.svg"
+	import undoIcon from "$lib/assets/undo.svg"
 </script>
 
 <menu>
+	<button class="button" on:click={() => dispatch("undo")}>
+		<img class="undo" src={undoIcon} alt="undo" />
+	</button>
 	{#each { length: 10 } as _, digit}
 		<button
 			class="button"
@@ -55,6 +59,10 @@
 	}
 
 	.clear {
+		width: 1rem;
+	}
+
+	.undo {
 		width: 1rem;
 	}
 

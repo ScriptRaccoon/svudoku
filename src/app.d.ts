@@ -9,7 +9,8 @@ declare global {
 	}
 
 	type board = number[][]
-	type pencil_board = Set<number>[][]
+	type marks = Set<number>
+	type pencil_board = marks[][]
 	type coord = [number, number]
 }
 
