@@ -12,7 +12,7 @@
 	<label
 		for="pencil_checkbox"
 		class="pencil_label"
-		class:active={pencil_active}
+		class:active={$pencil_active}
 	>
 		Pencil marks
 		<input
