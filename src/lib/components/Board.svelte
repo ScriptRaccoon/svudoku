@@ -7,6 +7,7 @@
 	import Popup from "./Popup.svelte"
 	import { is_solved, is_valid } from "$lib/utils"
 	import { selected_coord } from "$lib/stores"
+	import { peers_dict } from "$lib/peers"
 
 	$: solved = is_solved(board)
 </script>
@@ -31,6 +32,10 @@
 							)}
 							selected={$selected_coord?.toString() ==
 								[row, col].toString()}
+							highlighted={!!$selected_coord &&
+								peers_dict[
+									$selected_coord.toString()
+								].includes([row, col].toString())}
 							on:select={() =>
 								($selected_coord = [row, col])}
 						/>

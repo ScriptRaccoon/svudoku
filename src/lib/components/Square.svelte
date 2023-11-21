@@ -8,6 +8,7 @@
 	export let fixed: boolean
 	export let valid: boolean = true
 	export let selected: boolean = false
+	export let highlighted: boolean = false
 </script>
 
 <button
@@ -15,6 +16,7 @@
 	on:click={() => dispatch("select")}
 	class:fixed
 	class:selected
+	class:highlighted
 	tabindex="-1"
 >
 	<div class="digit" class:invalid={!valid}>
@@ -40,12 +42,16 @@
 		display: grid;
 	}
 
-	.square:focus-visible,
 	.square.selected {
 		background-color: var(--select-color);
+		z-index: 1;
 	}
 
-	.square:not(.selected).fixed {
+	.square.highlighted {
+		background-color: var(--highlight-color);
+	}
+
+	.square:not(.selected, .highlighted).fixed {
 		background-color: var(--lightgray-color);
 	}
 
