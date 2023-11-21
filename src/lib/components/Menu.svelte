@@ -1,81 +1,101 @@
 <script lang="ts">
-	import { pencil_active } from "$lib/stores"
 	import { createEventDispatcher } from "svelte"
 	const dispatch = createEventDispatcher()
-
 	import clearIcon from "$lib/assets/clear.svg"
 	import undoIcon from "$lib/assets/undo.svg"
+	import pencilIcon from "$lib/assets/pencil.svg"
+	import { pencil_active } from "$lib/stores"
 </script>
 
 <menu>
-	<button class="button" on:click={() => dispatch("undo")}>
-		<img class="undo" src={undoIcon} alt="undo" />
-	</button>
-	{#each { length: 10 } as _, digit}
+	{#each { length: 9 } as _, index}
+		{@const digit = index + 1}
+
 		<button
-			class="button"
+			class="button digit"
 			on:click={() => dispatch("digit", digit)}
 		>
-			{#if digit >= 1}
-				<span>{digit}</span>
-			{:else}
-				<img class="clear" src={clearIcon} alt="clear" />
-			{/if}
+			{digit}
 		</button>
 	{/each}
 </menu>
 
 <menu>
-	<div>
-		<button class="button" on:click={() => dispatch("reset")}
-			>Reset</button
-		>
-		<button class="button" on:click={() => dispatch("new")}
-			>New</button
-		>
-	</div>
-	<label
-		for="pencil_checkbox"
-		class="pencil_label"
-		class:active={$pencil_active}
+	<button class="button" on:click={() => dispatch("reset")}
+		>Reset</button
 	>
-		Pencil marks
-		<input
-			type="checkbox"
-			bind:checked={$pencil_active}
-			id="pencil_checkbox"
-		/>
-	</label>
+	<button class="button" on:click={() => dispatch("new")}
+		>New</button
+	>
+	<button class="button" on:click={() => dispatch("undo")}>
+		<img src={undoIcon} alt="undo" />
+	</button>
+	<button class="button" on:click={() => dispatch("digit", 0)}>
+		<img src={clearIcon} alt="clear" />
+	</button>
+	<button
+		class:active={$pencil_active}
+		class="button pencil_button"
+		on:click={() => dispatch("toggle_pencil")}
+	>
+		<span class="label">Pencil marks</span>
+		<span>
+			{#if $pencil_active}
+				on
+			{:else}
+				off
+			{/if}
+		</span>
+		<img src={pencilIcon} alt="pencil" />
+	</button>
 </menu>
 
 <style>
 	menu {
-		margin-top: 1.5rem;
 		display: flex;
-		justify-content: space-between;
-		gap: 0.5rem;
+		align-items: stretch;
 		width: min(80vmin, 30rem);
 		margin-inline: auto;
+		flex-wrap: wrap;
+		gap: 0.5rem;
 	}
 
-	.clear {
+	menu:first-of-type {
+		margin-block: 1.5rem 1rem;
+		justify-content: space-between;
+	}
+
+	button img {
 		width: 1rem;
 	}
 
-	.undo {
-		width: 1rem;
-	}
-
-	.pencil_label {
-		border: 0.1rem solid var(--lightgray-color);
-		padding: 0.4rem 0.8rem;
-		cursor: pointer;
-		border-radius: 0.25rem;
+	.pencil_button {
 		display: flex;
-		gap: 0.75rem;
+		gap: 0.25rem;
+		margin-left: auto;
 	}
 
-	.pencil_label.active {
-		background-color: var(--lightgray-color);
+	.pencil_button:not(.active) {
+		background-color: var(--select-color);
+	}
+
+	@media (max-width: 32rem) {
+		menu:first-of-type {
+			gap: 0.1rem;
+		}
+
+		.pencil_button .label {
+			display: none;
+		}
+
+		button.digit {
+			display: flex;
+			align-items: center;
+			aspect-ratio: 1;
+			padding: 0.5rem;
+		}
+		button:not(.digit) {
+			padding: 0.2rem 0.4rem;
+		}
 	}
 </style>

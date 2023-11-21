@@ -38,15 +38,9 @@ button {
 	padding: 0.4rem 0.8rem;
 }
 
-.button:focus-visible,
-input[type="checkbox"]:focus-visible {
+.button:focus-visible {
 	outline-offset: 0.2rem;
 	outline: 2px solid var(--primary-color);
-}
-
-input[type="checkbox"] {
-	accent-color: var(--primary-color);
-	cursor: pointer;
 }
 
 .vh {

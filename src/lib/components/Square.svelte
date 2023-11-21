@@ -43,6 +43,7 @@
 		cursor: pointer;
 		display: grid;
 		color: black;
+		aspect-ratio: 1;
 	}
 
 	.square.fixed {
@@ -69,7 +70,7 @@
 
 	.digit {
 		font-weight: 600;
-		font-size: 1.5rem;
+		font-size: min(1.5rem, 7vw);
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -80,7 +81,7 @@
 	}
 
 	.marks {
-		font-size: 0.8rem;
+		font-size: min(0.8rem, 2vw);
 		display: grid;
 		grid-template: repeat(3, 1fr) / repeat(3, 1fr);
 	}

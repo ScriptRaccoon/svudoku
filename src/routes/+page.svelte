@@ -90,6 +90,10 @@
 			pencil_board[row][col] = marks
 		}
 	}
+
+	function toggle_pencil() {
+		$pencil_active = !$pencil_active
+	}
 </script>
 
 <svelte:window on:keydown={handle_keydown} />
@@ -100,4 +104,5 @@
 	on:new={new_board}
 	on:digit={(e) => set_digit(e.detail)}
 	on:undo={undo}
+	on:toggle_pencil={toggle_pencil}
 />
