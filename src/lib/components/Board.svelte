@@ -25,7 +25,7 @@
 						{@const row = 3 * block_row + row_offset}
 						{@const col = 3 * block_col + col_offset}
 						<Square
-							bind:value={board[row][col]}
+							bind:digit={board[row][col]}
 							bind:marks={pencil_board[row][col]}
 							fixed={original[row][col] >= 1}
 							valid={is_valid(

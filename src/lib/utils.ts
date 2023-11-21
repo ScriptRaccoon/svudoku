@@ -47,8 +47,8 @@ export function parse_line(line: string): board | null {
 	return board
 }
 
-export function display_value(value: number): string {
-	return value == 0 ? "" : value.toString()
+export function display_value(digit: number): string {
+	return digit == 0 ? "" : digit.toString()
 }
 
 function random_int(a: number, b: number) {

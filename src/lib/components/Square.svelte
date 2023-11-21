@@ -3,7 +3,7 @@
 	import { createEventDispatcher } from "svelte"
 	const dispatch = createEventDispatcher()
 
-	export let value: number
+	export let digit: number
 	export let marks: Set<number> = new Set([])
 	export let fixed: boolean
 	export let valid: boolean = true
@@ -18,10 +18,10 @@
 	tabindex="-1"
 >
 	<div class="digit" class:invalid={!valid}>
-		{display_value(value)}
+		{display_value(digit)}
 	</div>
 
-	{#if value == 0}
+	{#if digit == 0}
 		<div class="marks">
 			{#each { length: 9 } as _, index}
 				{@const digit = index + 1}
