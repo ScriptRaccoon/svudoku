@@ -13,5 +13,5 @@ export const load = async (event) => {
 	const random_line = random_element(db)
 	if (!random_line.match(LINE_REGEXP))
 		throw error(500, "Invalid database entry")
-	throw redirect(303, `/play?q=${random_line}`)
+	throw redirect(303, `/?q=${random_line}`)
 }
