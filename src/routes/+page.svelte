@@ -3,7 +3,12 @@
 	import { page } from "$app/stores"
 	import Board from "$lib/components/Board.svelte"
 	import Menu from "$lib/components/Menu.svelte"
-	import { ACTION_TYPE, DELETE_KEYS, DIGITS } from "$lib/config"
+	import {
+		ACTION_TYPE,
+		DELETE_KEYS,
+		DIGITS,
+		PENCIL_KEYS,
+	} from "$lib/config"
 	import { pencil_active, selected_coord } from "$lib/stores"
 	import {
 		marks_to_str,
@@ -62,6 +67,10 @@
 
 	function handle_keydown(e: KeyboardEvent): void {
 		const { key } = e
+		if (PENCIL_KEYS.includes(key)) {
+			$pencil_active = !$pencil_active
+			return
+		}
 		const digit = DELETE_KEYS.includes(key) ? 0 : parseInt(key)
 		set_digit(digit)
 	}
