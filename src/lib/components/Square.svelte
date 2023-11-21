@@ -11,13 +11,12 @@
 	let input_element: HTMLInputElement
 	let show_marks = true
 
-	function toggle_mark(e: Event, digit: number): void {
+	function toggle_mark(digit: number): void {
 		if (!$pencil_active) return
-		//@ts-ignore
-		if (e.target?.checked) {
-			marks = [...marks, digit]
+		if (digit in marks) {
+			marks = marks.filter((_digit) => _digit != digit)
 		} else {
-			marks = marks.filter((d) => d != digit)
+			marks = [...marks, digit]
 		}
 	}
 
@@ -56,7 +55,7 @@
 						type="checkbox"
 						class="vh"
 						disabled={!$pencil_active}
-						on:change={(e) => toggle_mark(e, digit)}
+						on:change={() => toggle_mark(digit)}
 					/>
 					<span>{digit}</span>
 				</label>
