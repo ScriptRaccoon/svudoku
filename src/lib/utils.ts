@@ -1,37 +1,23 @@
-import { LINE_REGEXP } from "./config"
+import { LINE_REGEXP, coordinates } from "./config"
+import { peers_dict } from "./peers"
 
 export function is_valid(
 	row: number,
 	col: number,
-	num: number,
+	digit: number,
 	board: board
 ): boolean {
-	if (num === 0) {
-		return true
-	}
-	for (let i = 0; i < 9; i++) {
-		if (i != row && board[i][col] === num) {
-			return false
-		}
-		if (i != col && board[row][i] === num) {
-			return false
-		}
-	}
+	if (digit === 0) return true
+	const peers = peers_dict[[row, col].toString()]
+	return peers.every(([x, y]) => board[x][y] != digit)
+}
 
-	const row_start = 3 * Math.floor(row / 3)
-	const col_start = 3 * Math.floor(col / 3)
-	for (let i = 0; i < 3; i++) {
-		for (let j = 0; j < 3; j++) {
-			if (
-				(row_start + i != row || col_start + j != col) &&
-				board[row_start + i][col_start + j] === num
-			) {
-				return false
-			}
-		}
-	}
-
-	return true
+export function is_solved(board: board): boolean {
+	return coordinates.every(
+		([row, col]) =>
+			board[row][col] >= 1 &&
+			is_valid(row, col, board[row][col], board)
+	)
 }
 
 export function parse_line(line: string): board | null {

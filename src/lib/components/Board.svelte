@@ -5,15 +5,10 @@
 
 	import Square from "./Square.svelte"
 	import Popup from "./Popup.svelte"
-	import { is_valid } from "$lib/utils"
-	import { coordinates } from "$lib/config"
+	import { is_solved, is_valid } from "$lib/utils"
 	import { selected_coord } from "$lib/stores"
 
-	$: solved = coordinates.every(
-		([row, col]) =>
-			board[row][col] >= 1 &&
-			is_valid(row, col, board[row][col], board)
-	)
+	$: solved = is_solved(board)
 </script>
 
 <div class="board">
