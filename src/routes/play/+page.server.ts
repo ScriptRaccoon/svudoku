@@ -1,5 +1,7 @@
 import { parse_line, random_element } from "$lib/utils.js"
 import { error, redirect } from "@sveltejs/kit"
+import db from "$lib/db.json"
+import { LINE_REGEXP } from "$lib/config.js"
 
 export const load = async (event) => {
 	const line = event.url.searchParams.get("q")
@@ -8,17 +10,8 @@ export const load = async (event) => {
 		if (original) return { original }
 		throw error(400, "Invalid query parameter")
 	}
-	let random_line = ""
-	try {
-		const res = await event.fetch("/db.txt")
-		const db = await res.text()
-		const lines = db
-			.split("\n")
-			.filter((line) => !line.startsWith("#"))
-			.map((line) => line.replace("\r", ""))
-		random_line = random_element(lines)
-	} catch (_) {
-		throw error(500, "Database could not be loaded")
-	}
+	const random_line = random_element(db)
+	if (!random_line.match(LINE_REGEXP))
+		throw error(500, "Invalid database entry")
 	throw redirect(303, `/play?q=${random_line}`)
 }
