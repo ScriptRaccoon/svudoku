@@ -59,12 +59,12 @@ export function random_element<T>(list: T[]): T {
 	return list[random_int(0, list.length)]
 }
 
-export function generate_empty_pencil_board() {
+export function generate_empty_pencil_board(): pencil_board {
 	const board: pencil_board = []
 	for (let row = 0; row < 9; row++) {
 		board.push([])
 		for (let col = 0; col < 9; col++) {
-			board[row][col] = []
+			board[row][col] = new Set()
 		}
 	}
 	return board

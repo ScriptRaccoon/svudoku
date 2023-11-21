@@ -7,17 +7,18 @@
 	export let fixed: boolean
 	export let valid: boolean = true
 	export let label: string
-	export let marks: number[] = []
+	export let marks: Set<number> = new Set([])
 	let input_element: HTMLInputElement
 	let show_marks = true
 
 	function toggle_mark(digit: number): void {
 		if (!$pencil_active) return
-		if (digit in marks) {
-			marks = marks.filter((_digit) => _digit != digit)
+		if (marks.has(digit)) {
+			marks.delete(digit)
 		} else {
-			marks = [...marks, digit]
+			marks.add(digit)
 		}
+		marks = marks
 	}
 
 	function select(): void {
@@ -37,7 +38,7 @@
 	}
 
 	$: if (value > 0) {
-		marks = []
+		marks.clear()
 	}
 </script>
 
@@ -48,7 +49,7 @@
 				{@const digit = index + 1}
 				<label
 					class="mark"
-					class:checked={marks.includes(digit)}
+					class:checked={marks.has(digit)}
 					class:nopointer={!$pencil_active}
 				>
 					<input

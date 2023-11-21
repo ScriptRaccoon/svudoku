@@ -9,7 +9,7 @@ declare global {
 	}
 
 	type board = number[][]
-	type pencil_board = number[][][]
+	type pencil_board = Set<number>[][]
 }
 
 export {}
