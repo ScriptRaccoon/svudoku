@@ -2,12 +2,33 @@
 	import { pencil_active } from "$lib/stores"
 	import { createEventDispatcher } from "svelte"
 	const dispatch = createEventDispatcher()
+
+	import clearIcon from "$lib/assets/clear.svg"
 </script>
 
 <menu>
+	{#each { length: 10 } as _, digit}
+		<button
+			class="button"
+			on:click={() => dispatch("digit", digit)}
+		>
+			{#if digit >= 1}
+				<span>{digit}</span>
+			{:else}
+				<img class="clear" src={clearIcon} alt="clear" />
+			{/if}
+		</button>
+	{/each}
+</menu>
+
+<menu>
 	<div>
-		<button on:click={() => dispatch("reset")}>Reset</button>
-		<button on:click={() => dispatch("new")}>New</button>
+		<button class="button" on:click={() => dispatch("reset")}
+			>Reset</button
+		>
+		<button class="button" on:click={() => dispatch("new")}
+			>New</button
+		>
 	</div>
 	<label
 		for="pencil_checkbox"
@@ -25,13 +46,16 @@
 
 <style>
 	menu {
-		padding-top: 1.5rem;
+		margin-top: 1.5rem;
 		display: flex;
 		justify-content: space-between;
-		align-items: center;
 		gap: 0.5rem;
 		width: min(80vmin, 30rem);
 		margin-inline: auto;
+	}
+
+	.clear {
+		width: 1rem;
 	}
 
 	.pencil_label {

@@ -9,6 +9,7 @@
 	--error-color: rgb(187, 5, 5);
 	--square-color: #fff;
 	--lightgray-color: #eee;
+	--select-color: #ccf;
 }
 
 body {
@@ -26,21 +27,17 @@ button {
 	font-family: inherit;
 	font-size: inherit;
 	outline: none;
+	cursor: pointer;
 }
 
-input:focus-visible {
-	border: 2px solid var(--primary-color);
-}
-
-button {
+.button {
 	background-color: var(--primary-color);
 	color: white;
 	border-radius: 0.25rem;
 	padding: 0.4rem 0.8rem;
-	cursor: pointer;
 }
 
-button:focus-visible,
+.button:focus-visible,
 input[type="checkbox"]:focus-visible {
 	outline-offset: 0.2rem;
 	outline: 2px solid var(--primary-color);
@@ -57,4 +54,9 @@ input[type="checkbox"] {
 	width: 10px;
 	height: 1px;
 	overflow: hidden;
+}
+
+img {
+	display: block;
+	max-width: 100%;
 }

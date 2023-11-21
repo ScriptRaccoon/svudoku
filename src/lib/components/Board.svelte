@@ -7,6 +7,7 @@
 	import Popup from "./Popup.svelte"
 	import { is_valid } from "$lib/utils"
 	import { coordinates } from "$lib/config"
+	import { selected_coord } from "$lib/stores"
 
 	$: solved = coordinates.every(
 		([row, col]) =>
@@ -25,6 +26,7 @@
 						{@const col = 3 * block_col + col_offset}
 						<Square
 							bind:value={board[row][col]}
+							bind:marks={pencil_board[row][col]}
 							fixed={original[row][col] >= 1}
 							valid={is_valid(
 								row,
@@ -32,11 +34,10 @@
 								board[row][col],
 								board
 							)}
-							label={`row ${row + 1}, column ${
-								col + 1
-							}`}
-							bind:marks={pencil_board[row][col]}
-							tabindex={9 * row + col + 1}
+							selected={$selected_coord?.toString() ==
+								[row, col].toString()}
+							on:select={() =>
+								($selected_coord = [row, col])}
 						/>
 					{/each}
 				{/each}

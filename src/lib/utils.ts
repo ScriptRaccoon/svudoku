@@ -51,7 +51,7 @@ export function display_value(value: number): string {
 	return value == 0 ? "" : value.toString()
 }
 
-export function random_int(a: number, b: number) {
+function random_int(a: number, b: number) {
 	return a + Math.floor((b - a) * Math.random())
 }
 

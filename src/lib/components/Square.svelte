@@ -1,108 +1,66 @@
 <script lang="ts">
-	import { DIGITS } from "$lib/config"
-	import { pencil_active } from "$lib/stores"
 	import { display_value } from "$lib/utils"
+	import { createEventDispatcher } from "svelte"
+	const dispatch = createEventDispatcher()
 
 	export let value: number
+	export let marks: Set<number> = new Set([])
 	export let fixed: boolean
 	export let valid: boolean = true
-	export let label: string
-	export let marks: Set<number> = new Set([])
-	export let tabindex: number = 1
-	let input_element: HTMLInputElement
-	let show_marks = true
-
-	function toggle_mark(digit: number): void {
-		if (!$pencil_active) return
-		if (marks.has(digit)) {
-			marks.delete(digit)
-		} else {
-			marks.add(digit)
-		}
-		marks = marks
-	}
-
-	function select(): void {
-		show_marks = false
-		input_element?.select()
-	}
-
-	function change_value(): void {
-		const new_value = input_element?.value
-		if (new_value === "") {
-			value = 0
-		} else if (DIGITS.includes(new_value)) {
-			value = parseInt(new_value)
-		} else {
-			input_element.value = display_value(value)
-		}
-	}
-
-	$: if (value > 0) {
-		marks.clear()
-	}
+	export let selected: boolean = false
 </script>
 
-<div class="square">
-	{#if value == 0 && show_marks}
+<button
+	class="square"
+	on:click={() => dispatch("select")}
+	class:fixed
+	class:selected
+	tabindex="-1"
+>
+	<div class="digit" class:invalid={!valid}>
+		{display_value(value)}
+	</div>
+
+	{#if value == 0}
 		<div class="marks">
 			{#each { length: 9 } as _, index}
 				{@const digit = index + 1}
-				<label
-					class="mark"
-					class:checked={marks.has(digit)}
-					class:nopointer={!$pencil_active}
-				>
-					<input
-						type="checkbox"
-						class="vh"
-						disabled={!$pencil_active}
-						on:change={() => toggle_mark(digit)}
-					/>
-					<span>{digit}</span>
-				</label>
+				<span class="mark" class:visible={marks.has(digit)}>
+					{digit}
+				</span>
 			{/each}
 		</div>
 	{/if}
-
-	<input
-		bind:this={input_element}
-		type="text"
-		class="digit"
-		class:fixed
-		class:invalid={!valid}
-		class:nopointer={$pencil_active}
-		value={display_value(value)}
-		disabled={fixed || $pencil_active}
-		aria-label={label}
-		on:change={change_value}
-		on:focus={select}
-		on:blur={() => (show_marks = true)}
-		{tabindex}
-	/>
-</div>
+</button>
 
 <style>
 	.square {
 		background-color: var(--square-color);
-		position: relative;
+		cursor: pointer;
+		display: grid;
+	}
+
+	.square:focus-visible,
+	.square.selected {
+		background-color: var(--select-color);
+	}
+
+	.square:not(.selected).fixed {
+		background-color: var(--lightgray-color);
 	}
 
 	.digit,
 	.marks {
-		width: 100%;
-		height: 100%;
-		position: absolute;
+		grid-row: 1;
+		grid-column: 1;
 	}
 
 	.digit {
 		font-weight: 600;
 		font-size: 1.5rem;
-		text-align: center;
-	}
-
-	.digit.fixed {
-		background-color: var(--lightgray-color);
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.digit.invalid {
@@ -117,19 +75,9 @@
 
 	.mark {
 		opacity: 0;
-		text-align: center;
-		cursor: pointer;
 	}
 
-	.mark:not(.checked):hover {
-		opacity: 0.4;
-	}
-
-	.mark.checked {
+	.mark.visible {
 		opacity: 0.85;
-	}
-
-	.nopointer {
-		pointer-events: none;
 	}
 </style>

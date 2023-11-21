@@ -10,6 +10,7 @@ declare global {
 
 	type board = number[][]
 	type pencil_board = Set<number>[][]
+	type coord = [number, number]
 }
 
 export {}
