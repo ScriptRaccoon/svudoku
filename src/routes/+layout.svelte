@@ -2,15 +2,13 @@
 	import { page } from "$app/stores"
 	import Header from "$lib/components/Header.svelte"
 	import "./app.css"
-
-	$: title = $page.data.title ?? "Sudoku"
 </script>
 
 <svelte:head>
-	<title>{title}</title>
+	<title>Sudoku</title>
 </svelte:head>
 
-<Header {title} />
+<Header />
 
 <main>
 	<slot />
