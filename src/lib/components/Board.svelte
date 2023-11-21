@@ -10,6 +10,9 @@
 	import { peers_dict } from "$lib/peers"
 
 	$: solved = is_solved(board)
+	$: selected_number = !$selected_coord
+		? null
+		: board[$selected_coord[0]][$selected_coord[1]]
 </script>
 
 <div class="board">
@@ -36,6 +39,8 @@
 								peers_dict[
 									$selected_coord.toString()
 								].includes([row, col].toString())}
+							colored={board[row][col] >= 1 &&
+								board[row][col] == selected_number}
 							on:select={() =>
 								($selected_coord = [row, col])}
 						/>

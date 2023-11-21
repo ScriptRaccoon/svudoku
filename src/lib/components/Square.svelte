@@ -9,6 +9,7 @@
 	export let valid: boolean = true
 	export let selected: boolean = false
 	export let highlighted: boolean = false
+	export let colored: boolean = false
 </script>
 
 <button
@@ -17,6 +18,7 @@
 	class:fixed
 	class:selected
 	class:highlighted
+	class:colored
 	tabindex="-1"
 >
 	<div class="digit" class:invalid={!valid}>
@@ -40,19 +42,23 @@
 		background-color: var(--square-color);
 		cursor: pointer;
 		display: grid;
+		color: black;
+	}
+
+	.square.fixed {
+		background-color: var(--lightgray-color);
 	}
 
 	.square.selected {
-		background-color: var(--select-color);
-		z-index: 1;
+		background-color: var(--select-color) !important;
 	}
 
 	.square.highlighted {
-		background-color: var(--highlight-color);
+		background-color: var(--highlight-color) !important;
 	}
 
-	.square:not(.selected, .highlighted).fixed {
-		background-color: var(--lightgray-color);
+	.square.colored {
+		color: var(--primary-color);
 	}
 
 	.digit,
