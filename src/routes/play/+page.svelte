@@ -3,7 +3,7 @@
 	import { page } from "$app/stores"
 	import Board from "$lib/components/Board.svelte"
 	import Menu from "$lib/components/Menu.svelte"
-	import { DIGITS } from "$lib/config"
+	import { DELETE_KEYS, DIGITS } from "$lib/config"
 	import { pencil_active, selected_coord } from "$lib/stores"
 	import { generate_empty_pencil_board } from "$lib/utils"
 
@@ -49,7 +49,8 @@
 	}
 
 	function handle_keydown(e: KeyboardEvent): void {
-		const digit = parseInt(e.key)
+		const { key } = e
+		const digit = DELETE_KEYS.includes(key) ? 0 : parseInt(key)
 		set_digit(digit)
 	}
 </script>
