@@ -8,8 +8,8 @@
 	export let valid: boolean = true
 	export let label: string
 	export let marks: number[] = []
-
 	let input_element: HTMLInputElement
+	let show_marks = true
 
 	function toggle_mark(e: Event, digit: number): void {
 		if (!$pencil_active) return
@@ -22,6 +22,7 @@
 	}
 
 	function select(): void {
+		show_marks = false
 		input_element?.select()
 	}
 
@@ -42,7 +43,7 @@
 </script>
 
 <div class="square">
-	{#if value == 0}
+	{#if value == 0 && show_marks}
 		<div class="marks">
 			{#each { length: 9 } as _, index}
 				{@const digit = index + 1}
@@ -75,6 +76,7 @@
 		aria-label={label}
 		on:change={change_value}
 		on:focus={select}
+		on:blur={() => (show_marks = true)}
 	/>
 </div>
 
