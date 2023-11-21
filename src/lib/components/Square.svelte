@@ -8,6 +8,7 @@
 	export let valid: boolean = true
 	export let label: string
 	export let marks: Set<number> = new Set([])
+	export let tabindex: number = 1
 	let input_element: HTMLInputElement
 	let show_marks = true
 
@@ -77,6 +78,7 @@
 		on:change={change_value}
 		on:focus={select}
 		on:blur={() => (show_marks = true)}
+		{tabindex}
 	/>
 </div>
 

@@ -36,6 +36,7 @@
 								col + 1
 							}`}
 							bind:marks={pencil_board[row][col]}
+							tabindex={9 * row + col + 1}
 						/>
 					{/each}
 				{/each}
