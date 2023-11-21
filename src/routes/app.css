@@ -50,3 +50,11 @@ input[type="checkbox"] {
 	accent-color: var(--primary-color);
 	cursor: pointer;
 }
+
+.vh {
+	position: absolute;
+	left: -100vw;
+	width: 10px;
+	height: 1px;
+	overflow: hidden;
+}

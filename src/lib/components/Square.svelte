@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { DIGITS } from "$lib/config"
 	import { pencil_active } from "$lib/stores"
 	import { display_value } from "$lib/utils"
 
@@ -8,115 +9,123 @@
 	export let label: string
 	export let marks: number[] = []
 
-	function handle_pencil_mark(e: Event, num: number) {
-		console.log("old marks", marks)
+	let input_element: HTMLInputElement
+
+	function toggle_mark(e: Event, digit: number): void {
+		if (!$pencil_active) return
 		//@ts-ignore
 		if (e.target?.checked) {
-			marks = [...marks, num]
+			marks = [...marks, digit]
 		} else {
-			marks = marks.filter((n) => n != num)
+			marks = marks.filter((d) => d != digit)
 		}
-		console.log("new marks", marks)
 	}
-
-	const digits = "123456789".split("")
-
-	let input_element: HTMLInputElement
 
 	function select(): void {
 		input_element?.select()
 	}
 
-	function change(): void {
+	function change_value(): void {
 		const new_value = input_element?.value
 		if (new_value === "") {
 			value = 0
-		} else if (digits.includes(new_value)) {
+		} else if (DIGITS.includes(new_value)) {
 			value = parseInt(new_value)
 		} else {
 			input_element.value = display_value(value)
 		}
 	}
+
+	$: if (value > 0) {
+		marks = []
+	}
 </script>
 
-{#if $pencil_active && value == 0}
-	<div class="square">
+<div class="square">
+	{#if value == 0}
 		<div class="marks">
 			{#each { length: 9 } as _, index}
-				{@const num = index + 1}
+				{@const digit = index + 1}
 				<label
 					class="mark"
-					class:visible={marks.includes(num)}
+					class:checked={marks.includes(digit)}
+					class:nopointer={!$pencil_active}
 				>
 					<input
 						type="checkbox"
-						on:change={(e) => handle_pencil_mark(e, num)}
+						class="vh"
+						disabled={!$pencil_active}
+						on:change={(e) => toggle_mark(e, digit)}
 					/>
-					<span>{num}</span>
+					<span>{digit}</span>
 				</label>
 			{/each}
 		</div>
-	</div>
-{:else}
+	{/if}
+
 	<input
+		bind:this={input_element}
 		type="text"
-		class="square"
+		class="digit"
 		class:fixed
 		class:invalid={!valid}
-		bind:this={input_element}
+		class:nopointer={$pencil_active}
 		value={display_value(value)}
-		on:change={change}
-		on:focus={select}
 		disabled={fixed || $pencil_active}
 		aria-label={label}
+		on:change={change_value}
+		on:focus={select}
 	/>
-{/if}
+</div>
 
 <style>
 	.square {
-		text-align: center;
-		width: 100%;
-		height: 100%;
-		font-weight: 600;
-		font-size: 1.4rem;
 		background-color: var(--square-color);
+		position: relative;
 	}
 
-	.square.fixed {
+	.digit,
+	.marks {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+	}
+
+	.digit {
+		font-weight: 600;
+		font-size: 1.5rem;
+		text-align: center;
+	}
+
+	.digit.fixed {
 		background-color: var(--lightgray-color);
 	}
 
-	.square.invalid {
+	.digit.invalid {
 		color: var(--error-color);
 	}
 
 	.marks {
-		width: 100%;
-		height: 100%;
-		font-weight: initial;
 		font-size: 0.8rem;
 		display: grid;
 		grid-template: repeat(3, 1fr) / repeat(3, 1fr);
 	}
 
-	.marks input[type="checkbox"] {
-		position: absolute;
-		left: -100vw;
-		width: 10px;
-		height: 1px;
-		overflow: hidden;
-	}
-
 	.mark {
-		cursor: pointer;
 		opacity: 0;
+		text-align: center;
+		cursor: pointer;
 	}
 
-	.mark:hover {
+	.mark:not(.checked):hover {
 		opacity: 0.4;
 	}
 
-	.mark.visible {
+	.mark.checked {
 		opacity: 0.85;
+	}
+
+	.nopointer {
+		pointer-events: none;
 	}
 </style>
