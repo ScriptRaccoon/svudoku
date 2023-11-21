@@ -9,7 +9,10 @@ export function is_valid(
 ): boolean {
 	if (digit === 0) return true
 	const peers = peers_dict[[row, col].toString()]
-	return peers.every(([x, y]) => board[x][y] != digit)
+	return peers.every((key) => {
+		const [x, y] = key.split(",")
+		return board[parseInt(x)][parseInt(y)] != digit
+	})
 }
 
 export function is_solved(board: board): boolean {
