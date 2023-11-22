@@ -46,6 +46,7 @@
 
 		let action = ""
 		if ($pencil_active) {
+			if (board[row][col] >= 1) return
 			const marks = pencil_board[row][col]
 			const prev = marks_to_str(marks)
 			if (digit === 0) {
