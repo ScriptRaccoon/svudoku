@@ -30,7 +30,7 @@ export function parse_line(line: string): board | null {
 		board.push([])
 		for (let col = 0; col < 9; col++) {
 			const val = line[9 * row + col]
-			board[row][col] = val === "." ? 0 : parseInt(val)
+			board[row][col] = parseInt(val)
 		}
 	}
 	return board
