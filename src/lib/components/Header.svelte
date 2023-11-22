@@ -1,5 +1,5 @@
 <header>
-	<h1>Sudoku</h1>
+	<h1>Svudoku</h1>
 </header>
 
 <style>

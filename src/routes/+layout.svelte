@@ -5,7 +5,7 @@
 </script>
 
 <svelte:head>
-	<title>Sudoku</title>
+	<title>Svudoku</title>
 </svelte:head>
 
 <Header />
