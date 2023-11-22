@@ -4,7 +4,7 @@
 	const dispatch = createEventDispatcher()
 
 	export let digit: number
-	export let marks: marks = new Set([])
+	export let marks: marks_type = new Set([])
 	export let fixed: boolean
 	export let valid: boolean = true
 	export let selected: boolean = false

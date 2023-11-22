@@ -5,7 +5,7 @@ export function is_valid(
 	row: number,
 	col: number,
 	digit: number,
-	board: board
+	board: board_type
 ): boolean {
 	if (digit === 0) return true
 	const peers = peers_dict[[row, col].toString()]
@@ -15,7 +15,7 @@ export function is_valid(
 	})
 }
 
-export function is_solved(board: board): boolean {
+export function is_solved(board: board_type): boolean {
 	return coordinates.every(
 		([row, col]) =>
 			board[row][col] >= 1 &&
@@ -23,9 +23,9 @@ export function is_solved(board: board): boolean {
 	)
 }
 
-export function parse_line(line: string): board | null {
+export function parse_line(line: string): board_type | null {
 	if (!line.match(LINE_REGEXP)) return null
-	const board: board = []
+	const board: board_type = []
 	for (let row = 0; row < 9; row++) {
 		board.push([])
 		for (let col = 0; col < 9; col++) {
@@ -48,8 +48,8 @@ export function random_element<T>(list: T[]): T {
 	return list[random_int(0, list.length)]
 }
 
-export function generate_empty_pencil_board(): pencil_board {
-	const board: pencil_board = []
+export function generate_empty_pencil_board(): pencil_board_type {
+	const board: pencil_board_type = []
 	for (let row = 0; row < 9; row++) {
 		board.push([])
 		for (let col = 0; col < 9; col++) {
@@ -59,10 +59,10 @@ export function generate_empty_pencil_board(): pencil_board {
 	return board
 }
 
-export function marks_to_str(marks: marks): string {
+export function marks_to_str(marks: marks_type): string {
 	return [...marks].join("")
 }
 
-export function str_to_marks(str: string): marks {
+export function str_to_marks(str: string): marks_type {
 	return new Set(str.split("").map((e) => parseInt(e)))
 }

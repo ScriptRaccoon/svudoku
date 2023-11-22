@@ -8,10 +8,10 @@ declare global {
 		// interface Platform {}
 	}
 
-	type board = number[][]
-	type marks = Set<number>
-	type pencil_board = marks[][]
-	type coord = [number, number]
+	type board_type = number[][]
+	type marks_type = Set<number>
+	type pencil_board_type = marks_type[][]
+	type coord_type = [number, number]
 }
 
 export {}

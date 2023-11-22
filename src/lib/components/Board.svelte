@@ -1,7 +1,7 @@
 <script lang="ts">
-	export let board: board
-	export let original: board
-	export let pencil_board: pencil_board
+	export let board: board_type
+	export let original: board_type
+	export let pencil_board: pencil_board_type
 
 	import Square from "./Square.svelte"
 	import Popup from "./Popup.svelte"

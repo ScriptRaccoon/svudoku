@@ -1,4 +1,4 @@
-export const coordinates: coord[] = new Array(9 ** 2)
+export const coordinates: coord_type[] = new Array(9 ** 2)
 	.fill(0)
 	.map((_, i) => [Math.floor(i / 9), i % 9])
 
