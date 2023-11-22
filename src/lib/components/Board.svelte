@@ -5,14 +5,34 @@
 
 	import Square from "./Square.svelte"
 	import Popup from "./Popup.svelte"
-	import { is_solved, is_valid } from "$lib/utils"
-	import { selected_coord } from "$lib/stores"
+	import {
+		generate_empty_valid_board,
+		is_solved,
+		is_valid,
+	} from "$lib/utils"
+	import { invalid_digits, selected_coord } from "$lib/stores"
 	import { peers_dict } from "$lib/peers"
 
 	$: solved = is_solved(board)
 	$: selected_number = !$selected_coord
 		? null
 		: board[$selected_coord[0]][$selected_coord[1]]
+
+	let valid_board = generate_empty_valid_board()
+
+	$: if (board) {
+		$invalid_digits = new Set()
+		for (let row = 0; row < 9; row++) {
+			for (let col = 0; col < 9; col++) {
+				const digit = board[row][col]
+				const valid = is_valid(row, col, digit, board)
+				valid_board[row][col] = valid
+				if (!valid) {
+					$invalid_digits.add(digit)
+				}
+			}
+		}
+	}
 </script>
 
 <div class="board">
@@ -27,12 +47,7 @@
 							bind:digit={board[row][col]}
 							bind:marks={pencil_board[row][col]}
 							fixed={original[row][col] >= 1}
-							valid={is_valid(
-								row,
-								col,
-								board[row][col],
-								board
-							)}
+							valid={valid_board[row][col]}
 							selected={$selected_coord?.toString() ==
 								[row, col].toString()}
 							highlighted={!!$selected_coord &&
@@ -55,10 +70,7 @@
 
 <style>
 	.board {
-		margin-inline: auto;
-		--size: min(80vmin, 30rem);
-		width: var(--size);
-		height: var(--size);
+		aspect-ratio: 1;
 		display: grid;
 		grid-template: repeat(3, 1fr) / repeat(3, 1fr);
 		background-color: black;

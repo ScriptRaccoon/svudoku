@@ -15,6 +15,17 @@ export function is_valid(
 	})
 }
 
+export function generate_empty_valid_board(): boolean[][] {
+	const result: boolean[][] = []
+	for (let row = 0; row < 9; row++) {
+		result.push([])
+		for (let col = 0; col < 9; col++) {
+			result[row].push(true)
+		}
+	}
+	return result
+}
+
 export function is_solved(board: board_type): boolean {
 	return coordinates.every(
 		([row, col]) =>

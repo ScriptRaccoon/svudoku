@@ -2,6 +2,7 @@
 	import { goto } from "$app/navigation"
 	import { page } from "$app/stores"
 	import Board from "$lib/components/Board.svelte"
+	import Errors from "$lib/components/Errors.svelte"
 	import Menu from "$lib/components/Menu.svelte"
 	import {
 		ACTION_TYPE,
@@ -9,7 +10,11 @@
 		DIGITS,
 		PENCIL_KEYS,
 	} from "$lib/config"
-	import { pencil_active, selected_coord } from "$lib/stores"
+	import {
+		pencil_active,
+		selected_coord,
+		invalid_digits,
+	} from "$lib/stores"
 	import {
 		marks_to_str,
 		str_to_marks,
@@ -27,6 +32,7 @@
 		board = JSON.parse(JSON.stringify(original))
 		pencil_board = generate_empty_pencil_board()
 		$selected_coord = null
+		$invalid_digits = new Set()
 		actions = []
 	}
 
@@ -100,6 +106,8 @@
 <svelte:window on:keydown={handle_keydown} />
 
 <Board bind:board {original} bind:pencil_board />
+<Errors></Errors>
+
 <Menu
 	on:reset={reset}
 	on:new={new_board}

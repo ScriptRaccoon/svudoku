@@ -13,3 +13,10 @@
 <main>
 	<slot />
 </main>
+
+<style>
+	main {
+		margin-inline: auto;
+		width: min(80vmin, 30rem);
+	}
+</style>

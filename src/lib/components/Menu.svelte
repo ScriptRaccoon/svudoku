@@ -54,8 +54,6 @@
 	menu {
 		display: flex;
 		align-items: stretch;
-		width: min(80vmin, 30rem);
-		margin-inline: auto;
 		flex-wrap: wrap;
 		gap: 0.5rem;
 	}
