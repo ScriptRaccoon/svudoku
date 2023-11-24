@@ -5,6 +5,8 @@
 	import undoIcon from "$lib/assets/undo.svg"
 	import pencilIcon from "$lib/assets/pencil.svg"
 	import { pencil_active } from "$lib/stores"
+	export let can_place_digit = false
+	export let can_undo = false
 </script>
 
 <menu class="digits">
@@ -12,6 +14,7 @@
 		{@const digit = index + 1}
 
 		<button
+			disabled={!can_place_digit}
 			class="button digit"
 			on:click={() => dispatch("digit", digit)}
 		>
@@ -27,11 +30,19 @@
 	<button class="button" on:click={() => dispatch("new")}
 		>New</button
 	>
-	<button class="button" on:click={() => dispatch("undo")}>
+	<button
+		disabled={!can_undo}
+		class="button"
+		on:click={() => dispatch("undo")}
+	>
 		<img src={undoIcon} alt="undo" />
 	</button>
-	<button class="button" on:click={() => dispatch("digit", 0)}>
-		<img src={clearIcon} alt="clear" />
+	<button
+		disabled={!can_place_digit}
+		class="button"
+		on:click={() => dispatch("digit", 0)}
+	>
+		<img src={clearIcon} alt="erase" />
 	</button>
 	<button
 		class:active={$pencil_active}

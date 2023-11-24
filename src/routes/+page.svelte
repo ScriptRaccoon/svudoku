@@ -29,12 +29,27 @@
 
 	let pencil_board = generate_empty_pencil_board()
 
+	let can_place_digit = false
+	let can_undo = false
+
+	$: {
+		if (!$selected_coord) {
+			can_place_digit = false
+		} else {
+			const [row, col] = $selected_coord
+			can_place_digit =
+				original[row][col] === 0 &&
+				(!$pencil_active || board[row][col] === 0)
+		}
+	}
+
 	function reset() {
 		board = JSON.parse(JSON.stringify(original))
 		pencil_board = generate_empty_pencil_board()
 		$selected_coord = null
 		$invalid_digits = new Set()
 		actions = []
+		can_undo = false
 	}
 
 	function new_board() {
@@ -73,6 +88,7 @@
 			board[row][col] = digit
 		}
 		actions.push(action)
+		can_undo = true
 	}
 
 	function handle_keydown(e: KeyboardEvent): void {
@@ -99,6 +115,7 @@
 			const marks = str_to_marks(prev_str)
 			pencil_board[row][col] = marks
 		}
+		if (actions.length === 0) can_undo = false
 	}
 
 	function toggle_pencil() {
@@ -117,4 +134,6 @@
 	on:digit={(e) => set_digit(e.detail)}
 	on:undo={undo}
 	on:toggle_pencil={toggle_pencil}
+	{can_place_digit}
+	{can_undo}
 />
