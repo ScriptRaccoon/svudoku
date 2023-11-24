@@ -1,24 +1,19 @@
 <script lang="ts">
-	export let board: board_type
-	export let original: board_type
-	export let pencil_board: pencil_board_type
+	export let board: Record<string, number>
+	export let original: Record<string, number>
+	export let pencil_board: Record<string, Set<number>>
 
 	import Square from "./Square.svelte"
 	import Popup from "./Popup.svelte"
-	import {
-		generate_empty_valid_board,
-		is_solved,
-		is_valid,
-	} from "$lib/utils"
+	import { is_solved, is_valid } from "$lib/utils"
 	import { error_message, selected_coord } from "$lib/stores"
 	import { peers_dict } from "$lib/peers"
+	import { coordinates, initial_valid_board, to_coord } from "$lib/config"
 
 	$: solved = is_solved(board)
-	$: selected_number = $selected_coord
-		? board[$selected_coord[0]][$selected_coord[1]]
-		: null
+	$: selected_number = $selected_coord ? board[$selected_coord] : null
 
-	let valid_board = generate_empty_valid_board()
+	let valid_board: Record<string, boolean> = initial_valid_board
 
 	$: if (board) {
 		update_valid_board()
@@ -26,20 +21,18 @@
 
 	function update_valid_board() {
 		const invalid_digits = new Set()
-		for (let row = 0; row < 9; row++) {
-			for (let col = 0; col < 9; col++) {
-				const digit = board[row][col]
-				const valid = is_valid(row, col, digit, board)
-				valid_board[row][col] = valid
-				if (!valid) {
-					invalid_digits.add(digit)
-				}
+		for (const coord of coordinates) {
+			const digit = board[coord]
+			const valid = is_valid(coord, digit, board)
+			valid_board[coord] = valid
+			if (!valid) {
+				invalid_digits.add(digit)
 			}
 		}
 		if (invalid_digits.size) {
 			$error_message =
 				"Oups! There is a conflict with the digit(s) " +
-				[...invalid_digits].sort().toString()
+				String(Array.from(invalid_digits).sort())
 		}
 	}
 </script>
@@ -52,21 +45,17 @@
 					{#each { length: 3 } as _, col_offset}
 						{@const row = 3 * block_row + row_offset}
 						{@const col = 3 * block_col + col_offset}
+						{@const coord = to_coord(row, col)}
 						<Square
-							bind:digit={board[row][col]}
-							bind:marks={pencil_board[row][col]}
-							fixed={original[row][col] >= 1}
-							valid={valid_board[row][col]}
-							selected={$selected_coord?.toString() ==
-								[row, col].toString()}
+							bind:digit={board[coord]}
+							bind:marks={pencil_board[coord]}
+							fixed={original[coord] >= 1}
+							valid={valid_board[coord]}
+							selected={coord == $selected_coord}
 							highlighted={!!$selected_coord &&
-								peers_dict[
-									$selected_coord.toString()
-								].includes([row, col].toString())}
-							colored={board[row][col] >= 1 &&
-								board[row][col] == selected_number}
-							on:select={() =>
-								($selected_coord = [row, col])}
+								peers_dict[$selected_coord].includes(coord)}
+							colored={board[coord] >= 1 && board[coord] == selected_number}
+							on:select={() => ($selected_coord = coord)}
 						/>
 					{/each}
 				{/each}

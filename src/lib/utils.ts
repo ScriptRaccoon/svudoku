@@ -2,53 +2,32 @@ import { LINE_REGEXP, coordinates } from "./config"
 import { peers_dict } from "./peers"
 
 export function is_valid(
-	row: number,
-	col: number,
+	coord: string,
 	digit: number,
-	board: board_type
+	board: Record<string, number>
 ): boolean {
 	if (digit === 0) return true
-	const peers = peers_dict[[row, col].toString()]
-	return peers.every((key) => {
-		const [x, y] = key.split(",")
-		return board[parseInt(x)][parseInt(y)] != digit
-	})
+	return peers_dict[coord].every((peer) => board[peer] != digit)
 }
 
-export function generate_empty_valid_board(): boolean[][] {
-	const result: boolean[][] = []
-	for (let row = 0; row < 9; row++) {
-		result.push([])
-		for (let col = 0; col < 9; col++) {
-			result[row].push(true)
-		}
-	}
-	return result
-}
-
-export function is_solved(board: board_type): boolean {
+export function is_solved(board: Record<string, number>): boolean {
 	return coordinates.every(
-		([row, col]) =>
-			board[row][col] >= 1 &&
-			is_valid(row, col, board[row][col], board)
+		(coord) => board[coord] >= 1 && is_valid(coord, board[coord], board)
 	)
 }
 
-export function parse_line(line: string): board_type | null {
+export function parse_line(line: string): Record<string, number> | null {
 	if (!line.match(LINE_REGEXP)) return null
-	const board: board_type = []
-	for (let row = 0; row < 9; row++) {
-		board.push([])
-		for (let col = 0; col < 9; col++) {
-			const val = line[9 * row + col]
-			board[row][col] = parseInt(val)
-		}
-	}
-	return board
+	const entries = coordinates.map((coord) => {
+		const [row, col] = coord.split("").map(Number)
+		const digit = parseInt(line[9 * row + col])
+		return [coord, digit]
+	})
+	return Object.fromEntries(entries)
 }
 
 export function display_value(digit: number): string {
-	return digit == 0 ? "" : digit.toString()
+	return digit == 0 ? "" : String(digit)
 }
 
 function random_int(a: number, b: number) {
@@ -59,21 +38,10 @@ export function random_element<T>(list: T[]): T {
 	return list[random_int(0, list.length)]
 }
 
-export function generate_empty_pencil_board(): pencil_board_type {
-	const board: pencil_board_type = []
-	for (let row = 0; row < 9; row++) {
-		board.push([])
-		for (let col = 0; col < 9; col++) {
-			board[row][col] = new Set()
-		}
-	}
-	return board
-}
-
-export function marks_to_str(marks: marks_type): string {
+export function marks_to_str(marks: Set<number>): string {
 	return [...marks].join("")
 }
 
-export function str_to_marks(str: string): marks_type {
+export function str_to_marks(str: string): Set<number> {
 	return new Set(str.split("").map((e) => parseInt(e)))
 }

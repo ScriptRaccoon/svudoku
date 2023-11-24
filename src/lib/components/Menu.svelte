@@ -24,17 +24,9 @@
 </menu>
 
 <menu class="actions">
-	<button class="button" on:click={() => dispatch("reset")}
-		>Reset</button
-	>
-	<button class="button" on:click={() => dispatch("new")}
-		>New</button
-	>
-	<button
-		disabled={!can_undo}
-		class="button"
-		on:click={() => dispatch("undo")}
-	>
+	<button class="button" on:click={() => dispatch("reset")}>Reset</button>
+	<button class="button" on:click={() => dispatch("new")}>New</button>
+	<button disabled={!can_undo} class="button" on:click={() => dispatch("undo")}>
 		<img src={undoIcon} alt="undo" />
 	</button>
 	<button

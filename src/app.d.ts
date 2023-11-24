@@ -7,11 +7,6 @@ declare global {
 		// interface PageData {}
 		// interface Platform {}
 	}
-
-	type board_type = number[][]
-	type marks_type = Set<number>
-	type pencil_board_type = marks_type[][]
-	type coord_type = [number, number]
 }
 
 export {}
