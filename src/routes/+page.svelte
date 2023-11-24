@@ -8,6 +8,7 @@
 		ACTION_TYPE,
 		DELETE_KEYS,
 		DIGITS,
+		MARK_LIMIT,
 		PENCIL_KEYS,
 	} from "$lib/config"
 	import {
@@ -59,8 +60,10 @@
 				marks.clear()
 			} else if (marks.has(digit)) {
 				marks.delete(digit)
-			} else {
+			} else if (marks.size < MARK_LIMIT) {
 				marks.add(digit)
+			} else {
+				return
 			}
 			pencil_board[row][col] = marks
 			const next = marks_to_str(marks)

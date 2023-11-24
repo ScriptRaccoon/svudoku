@@ -73,14 +73,15 @@
 		aspect-ratio: 1;
 		display: grid;
 		grid-template: repeat(3, 1fr) / repeat(3, 1fr);
-		background-color: black;
-		gap: 2px;
-		padding: 2px;
+		background-color: var(--grid-color-dark);
+		gap: min(0.4vmin, 2px);
+		padding: min(0.4vmin, 2px);
 	}
 
 	.block {
 		display: grid;
 		grid-template: repeat(3, 1fr) / repeat(3, 1fr);
-		gap: 1px;
+		gap: min(0.2vmin, 1px);
+		background-color: var(--grid-color-light);
 	}
 </style>

@@ -13,3 +13,5 @@ export const ACTION_TYPE = {
 	BOARD: "b",
 	PENCIL: "p",
 }
+
+export const MARK_LIMIT = 6

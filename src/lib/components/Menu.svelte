@@ -7,7 +7,7 @@
 	import { pencil_active } from "$lib/stores"
 </script>
 
-<menu>
+<menu class="digits">
 	{#each { length: 9 } as _, index}
 		{@const digit = index + 1}
 
@@ -20,7 +20,7 @@
 	{/each}
 </menu>
 
-<menu>
+<menu class="actions">
 	<button class="button" on:click={() => dispatch("reset")}
 		>Reset</button
 	>
@@ -55,12 +55,15 @@
 		display: flex;
 		align-items: stretch;
 		flex-wrap: wrap;
-		gap: 0.5rem;
 	}
 
-	menu:first-of-type {
+	menu.digits {
 		margin-block: 1.5rem 1rem;
 		justify-content: space-between;
+	}
+
+	menu.actions {
+		gap: 0.5rem;
 	}
 
 	button img {
@@ -78,22 +81,16 @@
 	}
 
 	@media (max-width: 32rem) {
-		menu:first-of-type {
-			gap: 0.1rem;
-		}
-
 		.pencil_button .label {
 			display: none;
 		}
 
-		button.digit {
-			display: flex;
-			align-items: center;
-			aspect-ratio: 1;
-			padding: 0.5rem;
+		button {
+			padding: 0.3rem 0.6rem;
 		}
-		button:not(.digit) {
-			padding: 0.2rem 0.4rem;
+
+		menu.actions {
+			font-size: 0.85rem;
 		}
 	}
 </style>

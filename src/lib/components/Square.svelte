@@ -27,9 +27,8 @@
 
 	{#if digit == 0}
 		<div class="marks">
-			{#each { length: 9 } as _, index}
-				{@const digit = index + 1}
-				<span class="mark" class:visible={marks.has(digit)}>
+			{#each marks as digit}
+				<span>
 					{digit}
 				</span>
 			{/each}
@@ -44,6 +43,7 @@
 		display: grid;
 		color: black;
 		aspect-ratio: 1;
+		align-items: center;
 	}
 
 	.square.fixed {
@@ -81,16 +81,22 @@
 	}
 
 	.marks {
-		font-size: min(0.8rem, 2vw);
-		display: grid;
-		grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: start;
+		padding: 0.1rem;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		column-gap: 0.6rem;
+		opacity: 0.6;
 	}
 
-	.mark {
-		opacity: 0;
-	}
-
-	.mark.visible {
-		opacity: 0.85;
+	@media (max-width: 32rem) {
+		.marks {
+			column-gap: 0.1rem;
+			font-size: 0.8rem;
+		}
 	}
 </style>

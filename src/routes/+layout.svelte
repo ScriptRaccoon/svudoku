@@ -17,6 +17,6 @@
 <style>
 	main {
 		margin-inline: auto;
-		width: min(80vmin, 30rem);
+		width: min(95vmin, 30rem);
 	}
 </style>
