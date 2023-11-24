@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from "$app/environment"
 	import { goto } from "$app/navigation"
 	import { page } from "$app/stores"
 	import Board from "$lib/components/Board.svelte"
@@ -14,6 +15,7 @@
 	} from "$lib/config"
 	import { pencil_active, selected_coord, error_message } from "$lib/stores"
 	import { marks_to_str, str_to_marks } from "$lib/utils"
+	import { onDestroy, onMount } from "svelte"
 
 	let actions: string[] = []
 
@@ -26,6 +28,7 @@
 
 	let can_place_digit = false
 	let can_undo = false
+	let app: HTMLElement
 
 	$: {
 		if (!$selected_coord) {
@@ -114,19 +117,33 @@
 	function toggle_pencil() {
 		$pencil_active = !$pencil_active
 	}
+
+	function handle_click(e: MouseEvent) {
+		if (!app?.contains(e.target as HTMLElement)) $selected_coord = null
+	}
+
+	onMount(() => {
+		if (browser) document.addEventListener("click", handle_click)
+	})
+
+	onDestroy(() => {
+		if (browser) document.removeEventListener("click", handle_click)
+	})
 </script>
 
 <svelte:window on:keydown={handle_keydown} />
 
-<Board bind:board {original} bind:pencil_board />
-<Errors></Errors>
+<div bind:this={app}>
+	<Board bind:board {original} bind:pencil_board />
+	<Errors></Errors>
 
-<Menu
-	on:reset={reset}
-	on:new={new_board}
-	on:digit={(e) => set_digit(e.detail)}
-	on:undo={undo}
-	on:toggle_pencil={toggle_pencil}
-	{can_place_digit}
-	{can_undo}
-/>
+	<Menu
+		on:reset={reset}
+		on:new={new_board}
+		on:digit={(e) => set_digit(e.detail)}
+		on:undo={undo}
+		on:toggle_pencil={toggle_pencil}
+		{can_place_digit}
+		{can_undo}
+	/>
+</div>
