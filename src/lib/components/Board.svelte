@@ -10,7 +10,7 @@
 		is_solved,
 		is_valid,
 	} from "$lib/utils"
-	import { invalid_digits, selected_coord } from "$lib/stores"
+	import { error_message, selected_coord } from "$lib/stores"
 	import { peers_dict } from "$lib/peers"
 
 	$: solved = is_solved(board)
@@ -21,16 +21,25 @@
 	let valid_board = generate_empty_valid_board()
 
 	$: if (board) {
-		$invalid_digits = new Set()
+		update_valid_board()
+	}
+
+	function update_valid_board() {
+		const invalid_digits = new Set()
 		for (let row = 0; row < 9; row++) {
 			for (let col = 0; col < 9; col++) {
 				const digit = board[row][col]
 				const valid = is_valid(row, col, digit, board)
 				valid_board[row][col] = valid
 				if (!valid) {
-					$invalid_digits.add(digit)
+					invalid_digits.add(digit)
 				}
 			}
+		}
+		if (invalid_digits.size) {
+			$error_message =
+				"Oups! There is a conflict with the digit(s) " +
+				[...invalid_digits].sort().toString()
 		}
 	}
 </script>

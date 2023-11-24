@@ -1,14 +1,10 @@
 <script lang="ts">
-	import { invalid_digits } from "$lib/stores"
-	$: term = $invalid_digits.size > 1 ? "digits" : "digit"
+	import { error_message } from "$lib/stores"
 </script>
 
 <div aria-live="polite">
-	{#if $invalid_digits.size}
-		<p class="error">
-			Oups! There is a conflict with the {term}
-			{[...$invalid_digits].sort().toString()}.
-		</p>
+	{#if $error_message}
+		<p class="error">{$error_message}</p>
 	{/if}
 </div>
 

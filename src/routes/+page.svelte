@@ -14,7 +14,7 @@
 	import {
 		pencil_active,
 		selected_coord,
-		invalid_digits,
+		error_message,
 	} from "$lib/stores"
 	import {
 		marks_to_str,
@@ -47,7 +47,7 @@
 		board = JSON.parse(JSON.stringify(original))
 		pencil_board = generate_empty_pencil_board()
 		$selected_coord = null
-		$invalid_digits = new Set()
+		$error_message = ""
 		actions = []
 		can_undo = false
 	}
@@ -66,6 +66,7 @@
 		const [row, col] = $selected_coord
 		if (original[row][col] >= 1) return
 
+		$error_message = ""
 		let action = ""
 		if ($pencil_active) {
 			if (board[row][col] >= 1) return
