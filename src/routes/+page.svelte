@@ -40,7 +40,11 @@
 		}
 	}
 
-	function reset() {
+	function reset(confirm = false) {
+		if (confirm) {
+			if (!window.confirm("Do you really want to reset the game?")) return
+		}
+
 		for (const coord of coordinates) {
 			board[coord] = original[coord]
 			pencil_board[coord] = new Set()
@@ -52,6 +56,7 @@
 	}
 
 	function new_board() {
+		if (!window.confirm("Do you really want to start a new game?")) return
 		goto("/")
 	}
 
@@ -138,7 +143,7 @@
 	<Errors></Errors>
 
 	<Menu
-		on:reset={reset}
+		on:reset={() => reset(true)}
 		on:new={new_board}
 		on:digit={(e) => set_digit(e.detail)}
 		on:undo={undo}
