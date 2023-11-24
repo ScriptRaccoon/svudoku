@@ -14,9 +14,9 @@
 	import { peers_dict } from "$lib/peers"
 
 	$: solved = is_solved(board)
-	$: selected_number = !$selected_coord
-		? null
-		: board[$selected_coord[0]][$selected_coord[1]]
+	$: selected_number = $selected_coord
+		? board[$selected_coord[0]][$selected_coord[1]]
+		: null
 
 	let valid_board = generate_empty_valid_board()
 
