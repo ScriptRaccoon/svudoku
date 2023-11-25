@@ -23,3 +23,6 @@ export const ACTION_TYPE = {
 }
 
 export const MARK_LIMIT = 6
+
+export const MODES = ["easy", "hard"]
+export const MODE_DEFAULT = MODES[0]
