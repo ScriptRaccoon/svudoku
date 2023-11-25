@@ -4,7 +4,7 @@
 	const dispatch = createEventDispatcher()
 
 	export let digit: number
-	export let marks = new Set<number>()
+	export let candidates = new Set<number>()
 	export let fixed: boolean
 	export let valid: boolean = true
 	export let selected: boolean = false
@@ -28,11 +28,9 @@
 	</div>
 
 	{#if digit == 0}
-		<div class="marks">
-			{#each marks as digit}
-				<span>
-					{digit}
-				</span>
+		<div class="candidates">
+			{#each candidates as candidate}
+				<span>{candidate}</span>
 			{/each}
 		</div>
 	{/if}
@@ -65,7 +63,7 @@
 	}
 
 	.digit,
-	.marks {
+	.candidates {
 		grid-row: 1;
 		grid-column: 1;
 	}
@@ -82,7 +80,7 @@
 		color: var(--error-color);
 	}
 
-	.marks {
+	.candidates {
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: space-between;
@@ -96,7 +94,7 @@
 	}
 
 	@media (max-width: 32rem) {
-		.marks {
+		.candidates {
 			column-gap: 0.1rem;
 			font-size: 0.8rem;
 		}

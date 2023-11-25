@@ -4,7 +4,7 @@
 	import clearIcon from "$lib/assets/clear.svg"
 	import undoIcon from "$lib/assets/undo.svg"
 	import pencilIcon from "$lib/assets/pencil.svg"
-	import { pencil_active } from "$lib/stores"
+	import { edit_candidates } from "$lib/stores"
 	export let can_place_digit = false
 	export let can_undo = false
 </script>
@@ -37,20 +37,20 @@
 		<img src={clearIcon} alt="erase" />
 	</button>
 	<button
-		class="button pencil_button"
-		on:click={() => dispatch("toggle_pencil")}
+		class="button candidates_button"
+		on:click={() => dispatch("toggle_candidates")}
 	>
-		Pencil
+		Candidates
 		<span>
-			{#if $pencil_active}
+			{#if $edit_candidates}
 				on
 			{:else}
 				off
 			{/if}
 		</span>
 		<img
-			class:active={$pencil_active}
-			class="pencil_icon"
+			class:active={$edit_candidates}
+			class="candidates_icon"
 			src={pencilIcon}
 			alt="pencil"
 		/>
@@ -77,16 +77,16 @@
 		width: 1rem;
 	}
 
-	.pencil_button {
+	.candidates_button {
 		margin-left: auto;
 	}
 
-	.pencil_icon {
+	.candidates_icon {
 		display: inline-block;
 		opacity: 0.3;
 	}
 
-	.pencil_icon.active {
+	.candidates_icon.active {
 		opacity: 1;
 	}
 

@@ -6,7 +6,7 @@
 
 	export let board: Record<string, number>
 	export let original: Record<string, number>
-	export let pencil_board: Record<string, Set<number>>
+	export let candidate_board: Record<string, Set<number>>
 	export let validity_board: Record<string, boolean>
 
 	$: selected_number = $selected_coord ? board[$selected_coord] : null
@@ -23,7 +23,7 @@
 						{@const coord = to_coord(row, col)}
 						<Square
 							bind:digit={board[coord]}
-							bind:marks={pencil_board[coord]}
+							bind:candidates={candidate_board[coord]}
 							fixed={original[coord] >= 1}
 							valid={validity_board[coord]}
 							selected={coord == $selected_coord}

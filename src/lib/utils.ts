@@ -38,10 +38,10 @@ export function random_element<T>(list: T[]): T {
 	return list[random_int(0, list.length)]
 }
 
-export function marks_to_str(marks: Set<number>): string {
-	return [...marks].join("")
+export function candidates_to_str(candidates: Set<number>): string {
+	return [...candidates].join("")
 }
 
-export function str_to_marks(str: string): Set<number> {
+export function str_to_candidates(str: string): Set<number> {
 	return new Set(str.split("").map((e) => Number(e)))
 }

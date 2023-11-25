@@ -11,24 +11,29 @@
 		ACTION_TYPE,
 		DELETE_KEYS,
 		DIGITS,
-		MARK_LIMIT,
+		CANDIDATE_LIMIT,
 		MODE_DEFAULT,
-		PENCIL_KEYS,
+		CANDIDATE_KEYS,
 		coordinates
 	} from "$lib/config"
 	import {
-		pencil_active,
+		edit_candidates,
 		selected_coord,
 		error_message,
 		popup_text,
 		popup_action
 	} from "$lib/stores"
-	import { is_solved, is_valid, marks_to_str, str_to_marks } from "$lib/utils"
+	import {
+		is_solved,
+		is_valid,
+		candidates_to_str,
+		str_to_candidates
+	} from "$lib/utils"
 	import { onDestroy, onMount, tick } from "svelte"
 
 	let original: Record<string, number> = $page.data.original
 	let board: Record<string, number> = Object.assign({}, original)
-	let pencil_board: Record<string, Set<number>> = Object.fromEntries(
+	let candidate_board: Record<string, Set<number>> = Object.fromEntries(
 		coordinates.map((coord) => [coord, new Set()])
 	)
 	let validity_board: Record<string, boolean> = Object.fromEntries(
@@ -42,7 +47,7 @@
 
 	$: can_place_digit = $selected_coord
 		? original[$selected_coord] === 0 &&
-		  (!$pencil_active || board[$selected_coord] === 0)
+		  (!$edit_candidates || board[$selected_coord] === 0)
 		: false
 
 	$: if ($page.data.original != original) {
@@ -59,7 +64,7 @@
 
 		for (const coord of coordinates) {
 			board[coord] = original[coord]
-			pencil_board[coord] = new Set()
+			candidate_board[coord] = new Set()
 		}
 
 		$selected_coord = null
@@ -84,23 +89,23 @@
 		$error_message = ""
 		let action = ""
 
-		if ($pencil_active) {
+		if ($edit_candidates) {
 			if (board[coord] >= 1) return
-			const marks = pencil_board[coord]
-			const prev = marks_to_str(marks)
+			const candidates = candidate_board[coord]
+			const prev = candidates_to_str(candidates)
 
 			if (digit === 0) {
-				marks.clear()
-			} else if (marks.has(digit)) {
-				marks.delete(digit)
-			} else if (marks.size < MARK_LIMIT) {
-				marks.add(digit)
+				candidates.clear()
+			} else if (candidates.has(digit)) {
+				candidates.delete(digit)
+			} else if (candidates.size < CANDIDATE_LIMIT) {
+				candidates.add(digit)
 			} else {
 				return
 			}
-			const next = marks_to_str(marks)
-			action = `${ACTION_TYPE.PENCIL}:${coord}:${prev}:${next}`
-			pencil_board[coord] = marks
+			const next = candidates_to_str(candidates)
+			action = `${ACTION_TYPE.CANDIDATE}:${coord}:${prev}:${next}`
+			candidate_board[coord] = candidates
 		} else {
 			action = `${ACTION_TYPE.BOARD}:${coord}:${board[coord]}:${digit}`
 			board[coord] = digit
@@ -117,8 +122,8 @@
 
 	function handle_keydown(e: KeyboardEvent): void {
 		const { key } = e
-		if (PENCIL_KEYS.includes(key)) {
-			$pencil_active = !$pencil_active
+		if (CANDIDATE_KEYS.includes(key)) {
+			$edit_candidates = !$edit_candidates
 			return
 		}
 		const digit = DELETE_KEYS.includes(key) ? 0 : Number(key)
@@ -132,14 +137,14 @@
 		const [type, coord, prev] = action.split(":")
 		if (type === ACTION_TYPE.BOARD) {
 			board[coord] = Number(prev)
-		} else if (type === ACTION_TYPE.PENCIL) {
-			pencil_board[coord] = str_to_marks(prev)
+		} else if (type === ACTION_TYPE.CANDIDATE) {
+			candidate_board[coord] = str_to_candidates(prev)
 		}
 		if (actions.length === 0) can_undo = false
 	}
 
-	function toggle_pencil() {
-		$pencil_active = !$pencil_active
+	function toggle_candidates() {
+		$edit_candidates = !$edit_candidates
 	}
 
 	function handle_click(e: MouseEvent) {
@@ -185,7 +190,7 @@
 
 <div bind:this={app}>
 	<ModeSelect on:change={change_mode} bind:mode />
-	<Board bind:board {original} bind:pencil_board {validity_board} />
+	<Board bind:board {original} bind:candidate_board {validity_board} />
 	<Popup />
 	<Errors />
 
@@ -194,7 +199,7 @@
 		on:new={load_new_board}
 		on:digit={(e) => set_digit(e.detail)}
 		on:undo={undo}
-		on:toggle_pencil={toggle_pencil}
+		on:toggle_candidates={toggle_candidates}
 		{can_place_digit}
 		{can_undo}
 	/>
