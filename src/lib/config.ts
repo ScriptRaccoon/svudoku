@@ -15,7 +15,7 @@ export const LINE_REGEXP = /^[0-9]{81}$/
 export const DIGITS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 export const DELETE_KEYS = ["Backspace", "x"]
-export const PENCIL_KEYS = ["p", " "]
+export const PENCIL_KEYS = ["p"]
 
 export const ACTION_TYPE = {
 	BOARD: "b",

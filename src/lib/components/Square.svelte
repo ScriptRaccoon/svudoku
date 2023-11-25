@@ -10,6 +10,7 @@
 	export let selected: boolean = false
 	export let highlighted: boolean = false
 	export let colored: boolean = false
+	export let coord: string
 </script>
 
 <button
@@ -20,6 +21,7 @@
 	class:highlighted
 	class:colored
 	tabindex="-1"
+	aria-label="coordinate {coord}"
 >
 	<div class="digit" class:invalid={!valid}>
 		{display_value(digit)}

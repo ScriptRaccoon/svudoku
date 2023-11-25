@@ -37,11 +37,10 @@
 		<img src={clearIcon} alt="erase" />
 	</button>
 	<button
-		class:active={$pencil_active}
 		class="button pencil_button"
 		on:click={() => dispatch("toggle_pencil")}
 	>
-		<span class="label">Pencil marks</span>
+		Pencil
 		<span>
 			{#if $pencil_active}
 				on
@@ -49,7 +48,12 @@
 				off
 			{/if}
 		</span>
-		<img src={pencilIcon} alt="pencil" />
+		<img
+			class:active={$pencil_active}
+			class="pencil_icon"
+			src={pencilIcon}
+			alt="pencil"
+		/>
 	</button>
 </menu>
 
@@ -74,20 +78,19 @@
 	}
 
 	.pencil_button {
-		display: flex;
-		gap: 0.25rem;
 		margin-left: auto;
 	}
 
-	.pencil_button:not(.active) {
-		background-color: var(--select-color);
+	.pencil_icon {
+		display: inline-block;
+		opacity: 0.3;
+	}
+
+	.pencil_icon.active {
+		opacity: 1;
 	}
 
 	@media (max-width: 32rem) {
-		.pencil_button .label {
-			display: none;
-		}
-
 		button {
 			padding: 0.3rem 0.6rem;
 		}

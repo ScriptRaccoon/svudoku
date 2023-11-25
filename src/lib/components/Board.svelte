@@ -56,6 +56,7 @@
 								peers_dict[$selected_coord].includes(coord)}
 							colored={board[coord] >= 1 && board[coord] == selected_number}
 							on:select={() => ($selected_coord = coord)}
+							{coord}
 						/>
 					{/each}
 				{/each}
