@@ -10,7 +10,7 @@ export const load = async (event) => {
 		if (original) return { original }
 		throw error(400, "Invalid query parameter")
 	}
-	const random_line = random_element(db)
+	const random_line = random_element(db.hard)
 	if (!random_line.match(LINE_REGEXP))
 		throw error(500, "Invalid database entry")
 	throw redirect(303, `/?q=${random_line}`)
