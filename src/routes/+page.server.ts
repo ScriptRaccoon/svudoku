@@ -1,9 +1,10 @@
-import { parse_line, random_element } from "$lib/utils.js"
+import type { PageServerLoad } from "./$types"
 import { error, redirect } from "@sveltejs/kit"
+import { parse_line, random_element } from "$lib/utils.js"
 import db from "$lib/db.json"
 import { LINE_REGEXP, MODES, MODE_DEFAULT } from "$lib/config.js"
 
-export const load = async (event) => {
+export const load: PageServerLoad = async (event) => {
 	const line = event.url.searchParams.get("q")
 	if (line) {
 		const original = parse_line(line)

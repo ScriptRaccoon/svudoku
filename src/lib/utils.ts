@@ -20,7 +20,7 @@ export function parse_line(line: string): Record<string, number> | null {
 	if (!line.match(LINE_REGEXP)) return null
 	const entries = coordinates.map((coord) => {
 		const [row, col] = coord.split("").map(Number)
-		const digit = parseInt(line[9 * row + col])
+		const digit = Number(line[9 * row + col])
 		return [coord, digit]
 	})
 	return Object.fromEntries(entries)
@@ -43,5 +43,5 @@ export function marks_to_str(marks: Set<number>): string {
 }
 
 export function str_to_marks(str: string): Set<number> {
-	return new Set(str.split("").map((e) => parseInt(e)))
+	return new Set(str.split("").map((e) => Number(e)))
 }

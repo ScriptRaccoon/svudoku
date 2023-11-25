@@ -7,7 +7,7 @@
 	export let board: Record<string, number>
 	export let original: Record<string, number>
 	export let pencil_board: Record<string, Set<number>>
-	export let valid_board: Record<string, boolean>
+	export let validity_board: Record<string, boolean>
 
 	$: selected_number = $selected_coord ? board[$selected_coord] : null
 </script>
@@ -25,7 +25,7 @@
 							bind:digit={board[coord]}
 							bind:marks={pencil_board[coord]}
 							fixed={original[coord] >= 1}
-							valid={valid_board[coord]}
+							valid={validity_board[coord]}
 							selected={coord == $selected_coord}
 							highlighted={!!$selected_coord &&
 								peers_dict[$selected_coord].includes(coord)}

@@ -14,8 +14,7 @@
 		MARK_LIMIT,
 		MODE_DEFAULT,
 		PENCIL_KEYS,
-		coordinates,
-		initial_valid_board
+		coordinates
 	} from "$lib/config"
 	import {
 		pencil_active,
@@ -27,29 +26,28 @@
 	import { is_solved, is_valid, marks_to_str, str_to_marks } from "$lib/utils"
 	import { onDestroy, onMount, tick } from "svelte"
 
-	let actions: string[] = []
-
-	let original = $page.data.original
-	let board = JSON.parse(JSON.stringify(original))
-
+	let original: Record<string, number> = $page.data.original
+	let board: Record<string, number> = Object.assign({}, original)
 	let pencil_board: Record<string, Set<number>> = Object.fromEntries(
 		coordinates.map((coord) => [coord, new Set()])
 	)
+	let validity_board: Record<string, boolean> = Object.fromEntries(
+		coordinates.map((coord) => [coord, true])
+	)
 
-	let can_place_digit = false
+	let actions: string[] = []
 	let can_undo = false
 	let app: HTMLElement
 	let mode = MODE_DEFAULT
-	let valid_board: Record<string, boolean> = initial_valid_board
 
-	$: {
-		if (!$selected_coord) {
-			can_place_digit = false
-		} else {
-			can_place_digit =
-				original[$selected_coord] === 0 &&
-				(!$pencil_active || board[$selected_coord] === 0)
-		}
+	$: can_place_digit = $selected_coord
+		? original[$selected_coord] === 0 &&
+		  (!$pencil_active || board[$selected_coord] === 0)
+		: false
+
+	$: if ($page.data.original != original) {
+		original = $page.data.original
+		reset()
 	}
 
 	function reset(confirm = false) {
@@ -63,6 +61,7 @@
 			board[coord] = original[coord]
 			pencil_board[coord] = new Set()
 		}
+
 		$selected_coord = null
 		$error_message = ""
 		actions = []
@@ -77,11 +76,6 @@
 		}
 	}
 
-	$: if ($page.data.original != original) {
-		original = $page.data.original
-		reset()
-	}
-
 	function set_digit(digit: number): void {
 		if (!$selected_coord || !DIGITS.includes(digit)) return
 		if (original[$selected_coord] >= 1) return
@@ -89,10 +83,12 @@
 
 		$error_message = ""
 		let action = ""
+
 		if ($pencil_active) {
 			if (board[coord] >= 1) return
 			const marks = pencil_board[coord]
 			const prev = marks_to_str(marks)
+
 			if (digit === 0) {
 				marks.clear()
 			} else if (marks.has(digit)) {
@@ -109,10 +105,13 @@
 			action = `${ACTION_TYPE.BOARD}:${coord}:${board[coord]}:${digit}`
 			board[coord] = digit
 		}
+
 		actions.push(action)
 		can_undo = true
+
 		if (is_solved(board)) {
 			$popup_text = "Solved!"
+			$popup_action = null
 		}
 	}
 
@@ -122,7 +121,7 @@
 			$pencil_active = !$pencil_active
 			return
 		}
-		const digit = DELETE_KEYS.includes(key) ? 0 : parseInt(key)
+		const digit = DELETE_KEYS.includes(key) ? 0 : Number(key)
 		set_digit(digit)
 	}
 
@@ -147,29 +146,21 @@
 		if (!app?.contains(e.target as HTMLElement)) $selected_coord = null
 	}
 
-	onMount(() => {
-		if (browser) document.addEventListener("click", handle_click)
-	})
-
-	onDestroy(() => {
-		if (browser) document.removeEventListener("click", handle_click)
-	})
-
 	async function change_mode() {
 		await tick()
 		load_new_board()
 	}
 
 	$: if (board) {
-		update_valid_board()
+		update_validity_board()
 	}
 
-	function update_valid_board() {
+	function update_validity_board() {
 		const invalid_digits = new Set()
 		for (const coord of coordinates) {
 			const digit = board[coord]
 			const valid = is_valid(coord, digit, board)
-			valid_board[coord] = valid
+			validity_board[coord] = valid
 			if (!valid) {
 				invalid_digits.add(digit)
 			}
@@ -180,13 +171,21 @@
 				String(Array.from(invalid_digits).sort())
 		}
 	}
+
+	onMount(() => {
+		if (browser) document.addEventListener("click", handle_click)
+	})
+
+	onDestroy(() => {
+		if (browser) document.removeEventListener("click", handle_click)
+	})
 </script>
 
 <svelte:window on:keydown={handle_keydown} />
 
 <div bind:this={app}>
 	<ModeSelect on:change={change_mode} bind:mode />
-	<Board bind:board {original} bind:pencil_board {valid_board} />
+	<Board bind:board {original} bind:pencil_board {validity_board} />
 	<Popup />
 	<Errors />
 
