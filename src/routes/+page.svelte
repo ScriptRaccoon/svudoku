@@ -71,7 +71,10 @@
 
 	function load_new_board() {
 		$popup_text = "Do you really want to start a new game?"
-		$popup_action = () => goto(`/?mode=${mode}`)
+		$popup_action = () => {
+			reset()
+			goto(`/?mode=${mode}`)
+		}
 	}
 
 	$: if ($page.data.original != original) {
