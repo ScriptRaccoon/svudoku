@@ -17,7 +17,12 @@
 		coordinates,
 		initial_valid_board
 	} from "$lib/config"
-	import { pencil_active, selected_coord, error_message } from "$lib/stores"
+	import {
+		pencil_active,
+		selected_coord,
+		error_message,
+		popup_text
+	} from "$lib/stores"
 	import { is_solved, is_valid, marks_to_str, str_to_marks } from "$lib/utils"
 	import { onDestroy, onMount, tick } from "svelte"
 
@@ -35,8 +40,6 @@
 	let app: HTMLElement
 	let mode = MODE_DEFAULT
 	let valid_board: Record<string, boolean> = initial_valid_board
-
-	$: solved = is_solved(board)
 
 	$: {
 		if (!$selected_coord) {
@@ -102,6 +105,9 @@
 		}
 		actions.push(action)
 		can_undo = true
+		if (is_solved(board)) {
+			$popup_text = "Solved!"
+		}
 	}
 
 	function handle_keydown(e: KeyboardEvent): void {
@@ -175,7 +181,7 @@
 <div bind:this={app}>
 	<ModeSelect on:change={change_mode} bind:mode />
 	<Board bind:board {original} bind:pencil_board {valid_board} />
-	<Popup text={solved ? "Solved!" : ""} />
+	<Popup />
 	<Errors />
 
 	<Menu

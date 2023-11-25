@@ -1,14 +1,22 @@
 <script lang="ts">
-	export let text = ""
+	import { popup_action, popup_text } from "$lib/stores"
+
+	function handle_close() {
+		$popup_text = null
+		if ($popup_action && typeof $popup_action === "function") {
+			$popup_action()
+		}
+		$popup_action = null
+	}
 </script>
 
-{#if text.length > 0}
+{#if $popup_text}
 	<div class="overlay" />
 {/if}
 
-<dialog open={text.length > 0} on:close={() => (text = "")}>
+<dialog open={Boolean($popup_text)} on:close={handle_close}>
 	<p>
-		{text}
+		{$popup_text}
 	</p>
 	<form method="dialog">
 		<button class="button">Ok</button>
