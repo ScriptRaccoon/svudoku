@@ -6,6 +6,7 @@
 	import Errors from "$lib/components/Errors.svelte"
 	import Menu from "$lib/components/Menu.svelte"
 	import ModeSelect from "$lib/components/ModeSelect.svelte"
+	import Popup from "$lib/components/Popup.svelte"
 	import {
 		ACTION_TYPE,
 		DELETE_KEYS,
@@ -13,10 +14,11 @@
 		MARK_LIMIT,
 		MODE_DEFAULT,
 		PENCIL_KEYS,
-		coordinates
+		coordinates,
+		initial_valid_board
 	} from "$lib/config"
 	import { pencil_active, selected_coord, error_message } from "$lib/stores"
-	import { marks_to_str, str_to_marks } from "$lib/utils"
+	import { is_solved, is_valid, marks_to_str, str_to_marks } from "$lib/utils"
 	import { onDestroy, onMount, tick } from "svelte"
 
 	let actions: string[] = []
@@ -32,6 +34,9 @@
 	let can_undo = false
 	let app: HTMLElement
 	let mode = MODE_DEFAULT
+	let valid_board: Record<string, boolean> = initial_valid_board
+
+	$: solved = is_solved(board)
 
 	$: {
 		if (!$selected_coord) {
@@ -142,14 +147,36 @@
 		await tick()
 		load_new_board()
 	}
+
+	$: if (board) {
+		update_valid_board()
+	}
+
+	function update_valid_board() {
+		const invalid_digits = new Set()
+		for (const coord of coordinates) {
+			const digit = board[coord]
+			const valid = is_valid(coord, digit, board)
+			valid_board[coord] = valid
+			if (!valid) {
+				invalid_digits.add(digit)
+			}
+		}
+		if (invalid_digits.size) {
+			$error_message =
+				"Oups! There is a conflict with the digit(s) " +
+				String(Array.from(invalid_digits).sort())
+		}
+	}
 </script>
 
 <svelte:window on:keydown={handle_keydown} />
 
 <div bind:this={app}>
 	<ModeSelect on:change={change_mode} bind:mode />
-	<Board bind:board {original} bind:pencil_board />
-	<Errors></Errors>
+	<Board bind:board {original} bind:pencil_board {valid_board} />
+	<Popup text={solved ? "Solved!" : ""} />
+	<Errors />
 
 	<Menu
 		on:reset={() => reset(true)}

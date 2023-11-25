@@ -11,7 +11,7 @@
 		{text}
 	</p>
 	<form method="dialog">
-		<button>Ok</button>
+		<button class="button">Ok</button>
 	</form>
 </dialog>
 

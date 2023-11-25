@@ -1,40 +1,15 @@
 <script lang="ts">
+	import Square from "./Square.svelte"
+	import { selected_coord } from "$lib/stores"
+	import { peers_dict } from "$lib/peers"
+	import { to_coord } from "$lib/config"
+
 	export let board: Record<string, number>
 	export let original: Record<string, number>
 	export let pencil_board: Record<string, Set<number>>
+	export let valid_board: Record<string, boolean>
 
-	import Square from "./Square.svelte"
-	import Popup from "./Popup.svelte"
-	import { is_solved, is_valid } from "$lib/utils"
-	import { error_message, selected_coord } from "$lib/stores"
-	import { peers_dict } from "$lib/peers"
-	import { coordinates, initial_valid_board, to_coord } from "$lib/config"
-
-	$: solved = is_solved(board)
 	$: selected_number = $selected_coord ? board[$selected_coord] : null
-
-	let valid_board: Record<string, boolean> = initial_valid_board
-
-	$: if (board) {
-		update_valid_board()
-	}
-
-	function update_valid_board() {
-		const invalid_digits = new Set()
-		for (const coord of coordinates) {
-			const digit = board[coord]
-			const valid = is_valid(coord, digit, board)
-			valid_board[coord] = valid
-			if (!valid) {
-				invalid_digits.add(digit)
-			}
-		}
-		if (invalid_digits.size) {
-			$error_message =
-				"Oups! There is a conflict with the digit(s) " +
-				String(Array.from(invalid_digits).sort())
-		}
-	}
 </script>
 
 <div class="board">
@@ -64,8 +39,6 @@
 		{/each}
 	{/each}
 </div>
-
-<Popup text={solved ? "Solved!" : ""} />
 
 <style>
 	.board {
