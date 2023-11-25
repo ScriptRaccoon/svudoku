@@ -5,14 +5,14 @@
 	import Board from "$lib/components/Board.svelte"
 	import Errors from "$lib/components/Errors.svelte"
 	import Menu from "$lib/components/Menu.svelte"
-	import ModeSelect from "$lib/components/ModeSelect.svelte"
+	import DifficultySelect from "$lib/components/DifficultySelect.svelte"
 	import Popup from "$lib/components/Popup.svelte"
 	import {
 		ACTION_TYPE,
 		DELETE_KEYS,
 		DIGITS,
 		CANDIDATE_LIMIT,
-		MODE_DEFAULT,
+		DIFFICULTY_DEFAULT,
 		CANDIDATE_KEYS,
 		coordinates
 	} from "$lib/config"
@@ -43,7 +43,7 @@
 	let actions: string[] = []
 	let can_undo = false
 	let app: HTMLElement
-	let mode = MODE_DEFAULT
+	let difficulty = DIFFICULTY_DEFAULT
 
 	$: can_place_digit = $selected_coord
 		? original[$selected_coord] === 0 &&
@@ -77,7 +77,7 @@
 		$popup_text = "Do you really want to start a new game?"
 		$popup_action = () => {
 			reset()
-			goto(`/?mode=${mode}`)
+			goto(`/?d=${difficulty}`)
 		}
 	}
 
@@ -151,7 +151,7 @@
 		if (!app?.contains(e.target as HTMLElement)) $selected_coord = null
 	}
 
-	async function change_mode() {
+	async function change_difficulty() {
 		await tick()
 		load_new_board()
 	}
@@ -189,7 +189,7 @@
 <svelte:window on:keydown={handle_keydown} />
 
 <div bind:this={app}>
-	<ModeSelect on:change={change_mode} bind:mode />
+	<DifficultySelect on:change={change_difficulty} bind:difficulty />
 	<Board bind:board {original} bind:candidate_board {validity_board} />
 	<Popup />
 	<Errors />

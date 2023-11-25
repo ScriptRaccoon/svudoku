@@ -15,5 +15,5 @@ export const ACTION_TYPE = {
 	CANDIDATE: "c"
 }
 export const CANDIDATE_LIMIT = 6
-export const MODES = ["easy", "hard"]
-export const MODE_DEFAULT = MODES[0]
+export const DIFFICULTIES = ["easy", "hard"]
+export const DIFFICULTY_DEFAULT = DIFFICULTIES[0]
