@@ -21,7 +21,8 @@
 		pencil_active,
 		selected_coord,
 		error_message,
-		popup_text
+		popup_text,
+		popup_action
 	} from "$lib/stores"
 	import { is_solved, is_valid, marks_to_str, str_to_marks } from "$lib/utils"
 	import { onDestroy, onMount, tick } from "svelte"
@@ -53,7 +54,9 @@
 
 	function reset(confirm = false) {
 		if (confirm) {
-			if (!window.confirm("Do you really want to reset the game?")) return
+			$popup_text = "Do you really want to reset the game?"
+			$popup_action = reset
+			return
 		}
 
 		for (const coord of coordinates) {
@@ -67,8 +70,8 @@
 	}
 
 	function load_new_board() {
-		if (!window.confirm("Do you really want to start a new game?")) return
-		goto(`/?mode=${mode}`)
+		$popup_text = "Do you really want to start a new game?"
+		$popup_action = () => goto(`/?mode=${mode}`)
 	}
 
 	$: if ($page.data.original != original) {
