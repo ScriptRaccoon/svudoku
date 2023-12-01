@@ -1,12 +1,15 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte"
 	const dispatch = createEventDispatcher()
-	import clearIcon from "$lib/assets/clear.svg"
-	import undoIcon from "$lib/assets/undo.svg"
-	import pencilIcon from "$lib/assets/pencil.svg"
 	import { edit_candidates } from "$lib/stores"
 	export let can_place_digit = false
 	export let can_undo = false
+	import Fa from "svelte-fa"
+	import {
+		faEraser,
+		faPencil,
+		faRotateLeft
+	} from "@fortawesome/free-solid-svg-icons"
 </script>
 
 <menu class="digits">
@@ -27,14 +30,14 @@
 	<button class="button" on:click={() => dispatch("reset")}>Reset</button>
 	<button class="button" on:click={() => dispatch("new")}>New</button>
 	<button disabled={!can_undo} class="button" on:click={() => dispatch("undo")}>
-		<img src={undoIcon} alt="undo" />
+		<Fa icon={faRotateLeft} />
 	</button>
 	<button
 		disabled={!can_place_digit}
 		class="button"
 		on:click={() => dispatch("digit", 0)}
 	>
-		<img src={clearIcon} alt="erase" />
+		<Fa icon={faEraser} />
 	</button>
 	<button
 		class="button candidates_button"
@@ -48,12 +51,7 @@
 				off
 			{/if}
 		</span>
-		<img
-			class:active={$edit_candidates}
-			class="candidates_icon"
-			src={pencilIcon}
-			alt="pencil"
-		/>
+		<Fa icon={faPencil} color={$edit_candidates ? "#ffffff" : "#ffffff77"} />
 	</button>
 </menu>
 
@@ -73,21 +71,8 @@
 		gap: 0.5rem;
 	}
 
-	button img {
-		width: 1rem;
-	}
-
 	.candidates_button {
 		margin-left: auto;
-	}
-
-	.candidates_icon {
-		display: inline-block;
-		opacity: 0.3;
-	}
-
-	.candidates_icon.active {
-		opacity: 1;
 	}
 
 	@media (max-width: 32rem) {
