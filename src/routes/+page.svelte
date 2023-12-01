@@ -5,7 +5,7 @@
 	import Board from "$lib/components/Board.svelte"
 	import Errors from "$lib/components/Errors.svelte"
 	import Menu from "$lib/components/Menu.svelte"
-	import DifficultySelect from "$lib/components/DifficultySelect.svelte"
+	import TopMenu from "$lib/components/TopMenu.svelte"
 	import Popup from "$lib/components/Popup.svelte"
 	import {
 		ACTION_TYPE,
@@ -189,7 +189,7 @@
 <svelte:window on:keydown={handle_keydown} />
 
 <div bind:this={app}>
-	<DifficultySelect on:change={change_difficulty} bind:difficulty />
+	<TopMenu on:change={change_difficulty} bind:difficulty />
 	<Board bind:board {original} bind:candidate_board {validity_board} />
 	<Popup />
 	<Errors />

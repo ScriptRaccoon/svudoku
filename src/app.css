@@ -64,3 +64,13 @@ img {
 	display: block;
 	max-width: 100%;
 }
+
+h1,
+h2 {
+	font-weight: 600;
+}
+
+a {
+	color: inherit;
+	outline-color: var(--primary-color);
+}
