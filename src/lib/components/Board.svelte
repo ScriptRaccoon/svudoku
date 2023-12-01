@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Square from "./Square.svelte"
-	import { selected_coord } from "$lib/stores"
+	import { selected_coord, show_highlights } from "$lib/stores"
 	import { peers_dict } from "$lib/peers"
 	import { to_coord } from "$lib/config"
 
@@ -27,9 +27,12 @@
 							fixed={original[coord] >= 1}
 							valid={validity_board[coord]}
 							selected={coord == $selected_coord}
-							highlighted={!!$selected_coord &&
+							highlighted={$show_highlights &&
+								!!$selected_coord &&
 								peers_dict[$selected_coord].includes(coord)}
-							colored={board[coord] >= 1 && board[coord] == selected_number}
+							colored={$show_highlights &&
+								board[coord] >= 1 &&
+								board[coord] == selected_number}
 							on:select={() => ($selected_coord = coord)}
 							{coord}
 						/>

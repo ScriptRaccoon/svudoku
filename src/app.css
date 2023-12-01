@@ -74,3 +74,15 @@ a {
 	color: inherit;
 	outline-color: var(--primary-color);
 }
+
+input[type="checkbox"] {
+	accent-color: var(--primary-color);
+}
+
+input[type="checkbox"]:focus-visible + label {
+	outline: 2px solid var(--primary-color);
+}
+
+label {
+	cursor: pointer;
+}
