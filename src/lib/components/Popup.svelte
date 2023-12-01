@@ -1,28 +1,27 @@
 <script lang="ts">
-	import { popup_action, popup_text } from "$lib/stores"
+	import { popup } from "$lib/stores"
 
 	function confirm() {
-		if ($popup_action) $popup_action()
+		if ($popup?.action) $popup.action()
 		cancel()
 	}
 
 	function cancel() {
-		$popup_text = null
-		$popup_action = null
+		$popup = null
 	}
 </script>
 
-{#if $popup_text}
+{#if $popup?.text}
 	<div class="overlay" />
 {/if}
 
-<dialog open={Boolean($popup_text)}>
+<dialog open={Boolean($popup)}>
 	<p>
-		{$popup_text}
+		{$popup?.text}
 	</p>
 	<menu>
 		<button class="button" on:click={confirm}>Ok</button>
-		{#if $popup_action}
+		{#if $popup?.action}
 			<button class="button" on:click={cancel}>Cancel</button>
 		{/if}
 	</menu>

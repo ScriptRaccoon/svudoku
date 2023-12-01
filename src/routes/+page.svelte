@@ -24,8 +24,7 @@
 		edit_candidates,
 		selected_coord,
 		error_message,
-		popup_text,
-		popup_action,
+		popup,
 		show_conflicts,
 		show_settings
 	} from "$lib/stores"
@@ -64,8 +63,10 @@
 
 	function reset(confirm = false) {
 		if (confirm) {
-			$popup_text = "Do you really want to reset the game?"
-			$popup_action = reset
+			$popup = {
+				text: "Do you really want to reset the game?",
+				action: reset
+			}
 			return
 		}
 
@@ -81,10 +82,12 @@
 	}
 
 	function load_new_board() {
-		$popup_text = "Do you really want to start a new game?"
-		$popup_action = () => {
-			reset()
-			goto("/")
+		$popup = {
+			text: "Do you really want to start a new game?",
+			action: () => {
+				reset()
+				goto("/")
+			}
 		}
 	}
 
@@ -132,8 +135,7 @@
 		can_undo = true
 
 		if (is_solved(board)) {
-			$popup_text = "Solved!"
-			$popup_action = null
+			$popup = { text: "Solved!", action: null }
 		}
 	}
 
