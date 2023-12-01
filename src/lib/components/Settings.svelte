@@ -1,9 +1,5 @@
 <script lang="ts">
-	import { show_highlights, show_conflicts } from "$lib/stores"
-
-	function go_back() {
-		window.history.back()
-	}
+	import { show_highlights, show_conflicts, show_settings } from "$lib/stores"
 </script>
 
 <h2>Settings</h2>
@@ -29,7 +25,9 @@
 </section>
 
 <p class="end">
-	<button class="button" on:click={go_back}>Go back</button>
+	<button class="button" on:click={() => ($show_settings = false)}>
+		Go back
+	</button>
 </p>
 
 <style>

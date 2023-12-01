@@ -2,6 +2,7 @@
 	import Fa from "svelte-fa"
 	import { DIFFICULTIES, DIFFICULTY_DEFAULT } from "$lib/config"
 	import { faGear } from "@fortawesome/free-solid-svg-icons"
+	import { show_settings } from "$lib/stores"
 
 	export let difficulty = DIFFICULTY_DEFAULT
 </script>
@@ -13,9 +14,9 @@
 		{/each}
 	</select>
 
-	<a href="/settings">
+	<button on:click={() => ($show_settings = true)}>
 		<Fa icon={faGear} color="#555" />
-	</a>
+	</button>
 </div>
 
 <style>

@@ -9,3 +9,4 @@ export const popup_action = writable<null | (() => void)>(null)
 
 export const show_highlights = writable<boolean>(true)
 export const show_conflicts = writable<boolean>(true)
+export const show_settings = writable<boolean>(false)

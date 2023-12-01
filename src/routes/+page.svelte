@@ -3,11 +3,14 @@
 	import { browser } from "$app/environment"
 	import { goto } from "$app/navigation"
 	import { page } from "$app/stores"
+
 	import Board from "$lib/components/Board.svelte"
 	import Errors from "$lib/components/Errors.svelte"
 	import Menu from "$lib/components/Menu.svelte"
 	import TopMenu from "$lib/components/TopMenu.svelte"
 	import Popup from "$lib/components/Popup.svelte"
+	import Settings from "$lib/components/Settings.svelte"
+
 	import {
 		ACTION_TYPE,
 		DELETE_KEYS,
@@ -17,20 +20,24 @@
 		CANDIDATE_KEYS,
 		coordinates
 	} from "$lib/config"
+
 	import {
 		edit_candidates,
 		selected_coord,
 		error_message,
 		popup_text,
 		popup_action,
-		show_conflicts
+		show_conflicts,
+		show_settings
 	} from "$lib/stores"
+
 	import {
 		is_solved,
 		is_valid,
 		candidates_to_str,
 		str_to_candidates
 	} from "$lib/utils"
+
 	import { peers_dict } from "$lib/peers"
 
 	let original: Record<string, number> = $page.data.original
@@ -200,19 +207,23 @@
 
 <svelte:window on:keydown={handle_keydown} />
 
-<div bind:this={app}>
-	<TopMenu on:change={change_difficulty} bind:difficulty />
-	<Board bind:board {original} bind:candidate_board {validity_board} />
-	<Popup />
+{#if $show_settings}
+	<Settings />
+{:else}
+	<div bind:this={app}>
+		<TopMenu on:change={change_difficulty} bind:difficulty />
+		<Board bind:board bind:candidate_board {validity_board} />
+		<Popup />
 
-	<Menu
-		on:reset={() => reset(true)}
-		on:new={load_new_board}
-		on:digit={(e) => set_digit(e.detail)}
-		on:undo={undo}
-		on:toggle_candidates={toggle_candidates}
-		{can_place_digit}
-		{can_undo}
-	/>
-	<Errors />
-</div>
+		<Menu
+			on:reset={() => reset(true)}
+			on:new={load_new_board}
+			on:digit={(e) => set_digit(e.detail)}
+			on:undo={undo}
+			on:toggle_candidates={toggle_candidates}
+			{can_place_digit}
+			{can_undo}
+		/>
+		<Errors />
+	</div>
+{/if}

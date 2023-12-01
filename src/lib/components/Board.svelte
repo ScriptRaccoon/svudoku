@@ -5,7 +5,6 @@
 	import { to_coord } from "$lib/config"
 
 	export let board: Record<string, number>
-	export let original: Record<string, number>
 	export let candidate_board: Record<string, Set<number>>
 	export let validity_board: Record<string, boolean>
 
