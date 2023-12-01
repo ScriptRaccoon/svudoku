@@ -26,16 +26,15 @@
 		<label for="conflict_checkbox">Warn about conflicting numbers</label>
 	</div>
 
-	<div>
-		<button class="button" on:click={() => dispatch("create")}>
-			Create Sudoku
-		</button>
-	</div>
+	<div></div>
 </section>
 
 <p class="end">
 	<button class="button" on:click={() => ($show_settings = false)}>
 		Go back
+	</button>
+	<button class="button" on:click={() => dispatch("create")}>
+		Create empty Sudoku
 	</button>
 </p>
 
@@ -54,5 +53,7 @@
 
 	.end {
 		margin-top: 2rem;
+		display: flex;
+		justify-content: space-between;
 	}
 </style>
