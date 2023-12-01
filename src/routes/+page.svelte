@@ -16,7 +16,6 @@
 		DELETE_KEYS,
 		DIGITS,
 		CANDIDATE_LIMIT,
-		DIFFICULTY_DEFAULT,
 		CANDIDATE_KEYS,
 		coordinates
 	} from "$lib/config"
@@ -52,7 +51,6 @@
 	let actions: string[] = []
 	let can_undo = false
 	let app: HTMLElement
-	let difficulty = DIFFICULTY_DEFAULT
 
 	$: can_place_digit = $selected_coord
 		? original[$selected_coord] === 0 &&
@@ -86,7 +84,7 @@
 		$popup_text = "Do you really want to start a new game?"
 		$popup_action = () => {
 			reset()
-			goto(`/?d=${difficulty}`)
+			goto("/")
 		}
 	}
 
@@ -170,11 +168,6 @@
 		if (!app?.contains(e.target as HTMLElement)) $selected_coord = null
 	}
 
-	async function change_difficulty() {
-		await tick()
-		load_new_board()
-	}
-
 	$: if (board) {
 		update_validity_board()
 	}
@@ -211,7 +204,7 @@
 	<Settings />
 {:else}
 	<div bind:this={app}>
-		<TopMenu on:change={change_difficulty} bind:difficulty />
+		<TopMenu />
 		<Board bind:board bind:candidate_board {validity_board} />
 		<Popup />
 
