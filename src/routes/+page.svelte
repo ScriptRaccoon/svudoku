@@ -193,7 +193,6 @@
 	<TopMenu on:change={change_difficulty} bind:difficulty />
 	<Board bind:board {original} bind:candidate_board {validity_board} />
 	<Popup />
-	<Errors />
 
 	<Menu
 		on:reset={() => reset(true)}
@@ -204,4 +203,5 @@
 		{can_place_digit}
 		{can_undo}
 	/>
+	<Errors />
 </div>
