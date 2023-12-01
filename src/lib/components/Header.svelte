@@ -4,7 +4,7 @@
 
 <style>
 	header {
-		padding-block: 1.5rem;
+		padding-block: 1.5rem 0.5em;
 	}
 
 	h1 {
