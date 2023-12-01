@@ -45,3 +45,26 @@ export function candidates_to_str(candidates: Set<number>): string {
 export function str_to_candidates(str: string): Set<number> {
 	return new Set(str.split("").map((e) => Number(e)))
 }
+
+function swap<T>(array: T[], i: number, j: number): void {
+	// prettier-ignore
+	[array[i], array[j]] = [array[j], array[i]]
+}
+
+function shuffle<T>(array: T[]): void {
+	for (let i = array.length - 1; i > 0; i--) {
+		const j = random_int(0, i + 1)
+		swap(array, i, j)
+	}
+}
+
+export function shuffle_line(line: string): string {
+	const positive_digits = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+	shuffle(positive_digits)
+	const digits = [0, ...positive_digits]
+	let shuffled_line = ""
+	for (const char of line) {
+		shuffled_line += String(digits[Number(char)])
+	}
+	return shuffled_line
+}
