@@ -21,7 +21,8 @@
 		selected_coord,
 		error_message,
 		popup_text,
-		popup_action
+		popup_action,
+		show_conflicts
 	} from "$lib/stores"
 	import {
 		is_solved,
@@ -170,7 +171,7 @@
 				invalid_digits.add(digit)
 			}
 		}
-		if (invalid_digits.size) {
+		if (invalid_digits.size && $show_conflicts) {
 			$error_message =
 				"Oups! There is a conflict with the digit(s) " +
 				String(Array.from(invalid_digits).sort())

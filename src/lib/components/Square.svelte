@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { show_conflicts } from "$lib/stores"
 	import { display_value } from "$lib/utils"
 	import { createEventDispatcher } from "svelte"
 	const dispatch = createEventDispatcher()
@@ -23,7 +24,7 @@
 	tabindex="-1"
 	aria-label="coordinate {coord}"
 >
-	<div class="digit" class:invalid={!valid}>
+	<div class="digit" class:invalid={$show_conflicts && !valid}>
 		{display_value(digit)}
 	</div>
 
