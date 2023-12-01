@@ -24,13 +24,12 @@
 						<Square
 							bind:digit={board[coord]}
 							bind:candidates={candidate_board[coord]}
-							fixed={original[coord] >= 1}
 							valid={validity_board[coord]}
 							selected={coord == $selected_coord}
 							highlighted={$show_highlights &&
 								!!$selected_coord &&
 								peers_dict[$selected_coord].includes(coord)}
-							colored={$show_highlights &&
+							current_number={$show_highlights &&
 								board[coord] >= 1 &&
 								board[coord] == selected_number}
 							on:select={() => ($selected_coord = coord)}

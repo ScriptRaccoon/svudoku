@@ -6,21 +6,19 @@
 
 	export let digit: number
 	export let candidates = new Set<number>()
-	export let fixed: boolean
 	export let valid: boolean = true
 	export let selected: boolean = false
 	export let highlighted: boolean = false
-	export let colored: boolean = false
+	export let current_number: boolean = false
 	export let coord: string
 </script>
 
 <button
 	class="square"
 	on:click={() => dispatch("select")}
-	class:fixed
 	class:selected
 	class:highlighted
-	class:colored
+	class:current_number
 	tabindex="-1"
 	aria-label="coordinate {coord}"
 >
@@ -47,10 +45,6 @@
 		align-items: center;
 	}
 
-	.square.fixed {
-		background-color: var(--lightgray-color);
-	}
-
 	.square.selected {
 		background-color: var(--select-color) !important;
 	}
@@ -59,8 +53,8 @@
 		background-color: var(--highlight-color) !important;
 	}
 
-	.square.colored {
-		color: var(--primary-color);
+	.square.current_number {
+		background-color: var(--select-color) !important;
 	}
 
 	.digit,
