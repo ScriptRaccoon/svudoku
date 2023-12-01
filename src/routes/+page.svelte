@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onDestroy, onMount, tick } from "svelte"
 	import { browser } from "$app/environment"
 	import { goto } from "$app/navigation"
 	import { page } from "$app/stores"
@@ -30,7 +31,7 @@
 		candidates_to_str,
 		str_to_candidates
 	} from "$lib/utils"
-	import { onDestroy, onMount, tick } from "svelte"
+	import { peers_dict } from "$lib/peers"
 
 	let original: Record<string, number> = $page.data.original
 	let board: Record<string, number> = Object.assign({}, original)
@@ -88,7 +89,6 @@
 		const coord = $selected_coord
 
 		$error_message = ""
-		let action = ""
 
 		if ($edit_candidates) {
 			if (board[coord] >= 1) return
@@ -105,14 +105,25 @@
 				return
 			}
 			const next = candidates_to_str(candidates)
-			action = `${ACTION_TYPE.CANDIDATE}:${coord}:${prev}:${next}`
+			const action = `${ACTION_TYPE.CANDIDATE}:${coord}:${prev}:${next}`
+			actions.push(action)
 			candidate_board[coord] = candidates
 		} else {
-			action = `${ACTION_TYPE.BOARD}:${coord}:${board[coord]}:${digit}`
+			const action = `${ACTION_TYPE.BOARD}:${coord}:${board[coord]}:${digit}`
+			actions.push(action)
 			board[coord] = digit
+
+			for (const peer of peers_dict[coord]) {
+				if (!candidate_board[peer].has(digit)) continue
+				const prev = candidates_to_str(candidate_board[peer])
+				candidate_board[peer].delete(digit)
+				const next = candidates_to_str(candidate_board[peer])
+				const minor_action = `${ACTION_TYPE.CANDIDATE}:${peer}:${prev}:${next}`
+				actions.push(minor_action)
+				candidate_board[peer] = candidate_board[peer]
+			}
 		}
 
-		actions.push(action)
 		can_undo = true
 
 		if (is_solved(board)) {
