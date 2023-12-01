@@ -6,6 +6,7 @@ declare global {
 		// interface Locals {}
 		interface PageData {
 			original: Record<string, number>
+			creating: boolean
 		}
 		// interface Platform {}
 	}

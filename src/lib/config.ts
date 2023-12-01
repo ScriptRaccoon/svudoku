@@ -15,3 +15,5 @@ export const ACTION_TYPE = {
 	CANDIDATE: "c"
 }
 export const CANDIDATE_LIMIT = 6
+
+export const empty_line = new Array(9 ** 2).fill(0).join("")

@@ -33,12 +33,14 @@
 		is_solved,
 		is_valid,
 		candidates_to_str,
-		str_to_candidates
+		str_to_candidates,
+		convert_to_line
 	} from "$lib/utils"
 
 	import { peers_dict } from "$lib/peers"
 
 	let original: Record<string, number> = $page.data.original
+	$: creating = $page.data.creating
 	let board: Record<string, number> = Object.assign({}, original)
 	let candidate_board: Record<string, Set<number>> = Object.fromEntries(
 		coordinates.map((coord) => [coord, new Set()])
@@ -191,6 +193,32 @@
 		}
 	}
 
+	function create_empty_board() {
+		goto("/?mode=create")
+		$show_settings = false
+	}
+
+	function get_url() {
+		const line = convert_to_line(board)
+		return `${$page.url.origin}/?q=${line}`
+	}
+
+	async function copy_url() {
+		const url = get_url()
+		try {
+			await window.navigator.clipboard.writeText(url)
+			$popup = {
+				text: "URL has been copied to the clipboard",
+				action: null
+			}
+		} catch {
+			$popup = {
+				text: "URL could not be copied",
+				action: null
+			}
+		}
+	}
+
 	onMount(() => {
 		if (browser) document.addEventListener("click", handle_click)
 	})
@@ -203,10 +231,14 @@
 <svelte:window on:keydown={handle_keydown} />
 
 {#if $show_settings}
-	<Settings />
+	<Settings on:create={create_empty_board} />
 {:else}
 	<div bind:this={app}>
-		<TopMenu />
+		<TopMenu
+			{creating}
+			on:show_settings={() => ($show_settings = true)}
+			on:copy={copy_url}
+		/>
 		<Board bind:board bind:candidate_board {validity_board} />
 		<Popup />
 

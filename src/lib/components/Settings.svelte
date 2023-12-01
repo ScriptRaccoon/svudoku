@@ -1,18 +1,21 @@
 <script lang="ts">
 	import { show_highlights, show_conflicts, show_settings } from "$lib/stores"
+	import { createEventDispatcher } from "svelte"
+
+	const dispatch = createEventDispatcher()
 </script>
 
 <h2>Settings</h2>
 
 <section aria-label="toggles">
-	<p class="toggle">
+	<div class="toggle">
 		<input
 			type="checkbox"
 			id="highlight_checkbox"
 			bind:checked={$show_highlights}
 		/>
 		<label for="highlight_checkbox">Show highlights</label>
-	</p>
+	</div>
 
 	<div class="toggle">
 		<input
@@ -21,6 +24,12 @@
 			bind:checked={$show_conflicts}
 		/>
 		<label for="conflict_checkbox">Warn about conflicting numbers</label>
+	</div>
+
+	<div>
+		<button class="button" on:click={() => dispatch("create")}>
+			Create Sudoku
+		</button>
 	</div>
 </section>
 
@@ -37,7 +46,10 @@
 
 	.toggle {
 		font-size: 1.25rem;
-		margin-bottom: 0.25rem;
+	}
+
+	section > * {
+		margin-bottom: 0.5rem;
 	}
 
 	.end {

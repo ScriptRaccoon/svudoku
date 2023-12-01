@@ -26,6 +26,17 @@ export function parse_line(line: string): Record<string, number> | null {
 	return Object.fromEntries(entries)
 }
 
+export function convert_to_line(board: Record<string, number>): string {
+	let line = ""
+	for (let row = 0; row < 9; row++) {
+		for (let col = 0; col < 9; col++) {
+			const char = board[String(row) + String(col)]
+			line += char
+		}
+	}
+	return line
+}
+
 export function display_value(digit: number): string {
 	return digit == 0 ? "" : String(digit)
 }
