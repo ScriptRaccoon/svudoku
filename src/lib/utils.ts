@@ -49,14 +49,6 @@ export function random_element<T>(list: T[]): T {
 	return list[random_int(0, list.length)]
 }
 
-export function candidates_to_str(candidates: Set<number>): string {
-	return [...candidates].join("")
-}
-
-export function str_to_candidates(str: string): Set<number> {
-	return new Set(str.split("").map((e) => Number(e)))
-}
-
 function swap<T>(array: T[], i: number, j: number): void {
 	// prettier-ignore
 	[array[i], array[j]] = [array[j], array[i]]

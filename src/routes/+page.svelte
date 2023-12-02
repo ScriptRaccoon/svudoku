@@ -29,21 +29,16 @@
 		show_settings
 	} from "$lib/stores"
 
-	import {
-		is_solved,
-		is_valid,
-		candidates_to_str,
-		str_to_candidates,
-		convert_to_line
-	} from "$lib/utils"
+	import { is_solved, is_valid, convert_to_line } from "$lib/utils"
 
 	import { peers_dict } from "$lib/peers"
 
 	let original: Record<string, number> = $page.data.original
 	$: creating = $page.data.creating
+
 	let board: Record<string, number> = Object.assign({}, original)
-	let candidate_board: Record<string, Set<number>> = Object.fromEntries(
-		coordinates.map((coord) => [coord, new Set()])
+	let candidate_board: Record<string, string> = Object.fromEntries(
+		coordinates.map((coord) => [coord, ""])
 	)
 	let validity_board: Record<string, boolean> = Object.fromEntries(
 		coordinates.map((coord) => [coord, true])
@@ -74,7 +69,7 @@
 
 		for (const coord of coordinates) {
 			board[coord] = original[coord]
-			candidate_board[coord] = new Set()
+			candidate_board[coord] = ""
 		}
 
 		$selected_coord = null
@@ -99,38 +94,34 @@
 		const coord = $selected_coord
 
 		$error_message = ""
+		const digit_str = String(digit)
 
 		if ($edit_candidates) {
 			if (board[coord] >= 1) return
-			const candidates = candidate_board[coord]
-			const prev = candidates_to_str(candidates)
-
+			const prev = candidate_board[coord]
 			if (digit === 0) {
-				candidates.clear()
-			} else if (candidates.has(digit)) {
-				candidates.delete(digit)
-			} else if (candidates.size < CANDIDATE_LIMIT) {
-				candidates.add(digit)
+				candidate_board[coord] = ""
+			} else if (prev.includes(digit_str)) {
+				candidate_board[coord] = candidate_board[coord].replace(digit_str, "")
+			} else if (prev.length < CANDIDATE_LIMIT) {
+				candidate_board[coord] += digit_str
 			} else {
 				return
 			}
-			const next = candidates_to_str(candidates)
+			const next = candidate_board[coord]
 			const action = `${ACTION_TYPE.CANDIDATE}:${coord}:${prev}:${next}`
 			actions.push(action)
-			candidate_board[coord] = candidates
 		} else {
 			const action = `${ACTION_TYPE.BOARD}:${coord}:${board[coord]}:${digit}`
 			actions.push(action)
 			board[coord] = digit
-
 			for (const peer of peers_dict[coord]) {
-				if (!candidate_board[peer].has(digit)) continue
-				const prev = candidates_to_str(candidate_board[peer])
-				candidate_board[peer].delete(digit)
-				const next = candidates_to_str(candidate_board[peer])
+				const prev = candidate_board[peer]
+				if (!prev.includes(digit_str)) continue
+				candidate_board[peer] = candidate_board[peer].replace(digit_str, "")
+				const next = candidate_board[peer]
 				const minor_action = `${ACTION_TYPE.CANDIDATE}:${peer}:${prev}:${next}`
 				actions.push(minor_action)
-				candidate_board[peer] = candidate_board[peer]
 			}
 		}
 
@@ -159,7 +150,7 @@
 		if (type === ACTION_TYPE.BOARD) {
 			board[coord] = Number(prev)
 		} else if (type === ACTION_TYPE.CANDIDATE) {
-			candidate_board[coord] = str_to_candidates(prev)
+			candidate_board[coord] = prev
 		}
 		if (actions.length === 0) can_undo = false
 	}

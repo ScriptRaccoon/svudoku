@@ -5,7 +5,7 @@
 	import { to_coord } from "$lib/config"
 
 	export let board: Record<string, number>
-	export let candidate_board: Record<string, Set<number>>
+	export let candidate_board: Record<string, string>
 	export let validity_board: Record<string, boolean>
 
 	$: selected_number = $selected_coord ? board[$selected_coord] : null
@@ -21,8 +21,8 @@
 						{@const col = 3 * block_col + col_offset}
 						{@const coord = to_coord(row, col)}
 						<Square
-							bind:digit={board[coord]}
-							bind:candidates={candidate_board[coord]}
+							digit={board[coord]}
+							candidates={candidate_board[coord].split("").map(Number)}
 							valid={validity_board[coord]}
 							selected={coord == $selected_coord}
 							highlighted={$show_highlights &&

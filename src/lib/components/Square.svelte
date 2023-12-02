@@ -5,7 +5,7 @@
 	const dispatch = createEventDispatcher()
 
 	export let digit: number
-	export let candidates = new Set<number>()
+	export let candidates: number[] = []
 	export let valid: boolean = true
 	export let selected: boolean = false
 	export let highlighted: boolean = false
