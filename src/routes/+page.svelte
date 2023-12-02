@@ -1,8 +1,12 @@
 <script lang="ts">
-	import { onDestroy, onMount, tick } from "svelte"
+	// SVELTE IMPORTS
+
+	import { onDestroy, onMount } from "svelte"
 	import { browser } from "$app/environment"
 	import { goto } from "$app/navigation"
 	import { page } from "$app/stores"
+
+	// COMPONENT IMPORTS
 
 	import Board from "$lib/components/Board.svelte"
 	import Errors from "$lib/components/Errors.svelte"
@@ -11,13 +15,16 @@
 	import Popup from "$lib/components/Popup.svelte"
 	import Settings from "$lib/components/Settings.svelte"
 
+	// TS IMPORTS
+
 	import {
 		ACTION_TYPE,
 		DELETE_KEYS,
 		DIGITS,
 		CANDIDATE_LIMIT,
 		CANDIDATE_KEYS,
-		coordinates
+		coordinates,
+		STORAGE_KEY
 	} from "$lib/config"
 
 	import {
@@ -29,42 +36,45 @@
 		show_settings
 	} from "$lib/stores"
 
-	import { is_solved, is_valid, convert_to_line } from "$lib/utils"
+	import {
+		is_solved,
+		is_valid,
+		convert_to_line,
+		get_stored_value,
+		store_value
+	} from "$lib/utils"
 
 	import { peers_dict } from "$lib/peers"
 
+	// GLOBAL VARIABLES
+
 	let original: Record<string, number> = $page.data.original
-	$: creating = $page.data.creating
 
-	let board: Record<string, number> = Object.assign({}, original)
+	let board: Record<string, number> = get_stored_value({
+		default: Object.assign({}, original),
+		key: STORAGE_KEY.BOARD
+	})
 
-	if (browser && window.localStorage.getItem("board")) {
-		board = JSON.parse(window.localStorage.getItem("board")!)
-	}
+	let candidate_board: Record<string, string> = get_stored_value({
+		default: Object.fromEntries(coordinates.map((coord) => [coord, ""])),
+		key: STORAGE_KEY.CANDIDATES
+	})
 
-	let candidate_board: Record<string, string> = Object.fromEntries(
-		coordinates.map((coord) => [coord, ""])
-	)
-
-	if (browser && window.localStorage.getItem("candidate_board")) {
-		candidate_board = JSON.parse(
-			window.localStorage.getItem("candidate_board")!
-		)
-	}
+	let actions: string[] = get_stored_value({
+		default: [],
+		key: STORAGE_KEY.ACTIONS
+	})
 
 	let validity_board: Record<string, boolean> = Object.fromEntries(
 		coordinates.map((coord) => [coord, true])
 	)
 
-	let can_undo = false
-	let actions: string[] = []
-
-	if (browser && window.localStorage.getItem("actions")) {
-		actions = JSON.parse(window.localStorage.getItem("actions")!)
-		if (actions.length > 0) can_undo = true
-	}
-
 	let app: HTMLElement
+
+	// REACTIVE BLOCKS
+
+	$: can_undo = actions.length > 0
+	$: creating = $page.data.creating
 
 	$: can_place_digit = $selected_coord
 		? original[$selected_coord] === 0 &&
@@ -76,23 +86,16 @@
 		reset()
 	}
 
-	$: if (browser) {
-		window.localStorage.setItem("board", JSON.stringify(board))
-	}
+	$: store_value({ key: STORAGE_KEY.BOARD, value: board })
+	$: store_value({ key: STORAGE_KEY.CANDIDATES, value: candidate_board })
+	$: store_value({ key: STORAGE_KEY.ACTIONS, value: actions })
 
-	$: if (browser) {
-		window.localStorage.setItem(
-			"candidate_board",
-			JSON.stringify(candidate_board)
-		)
-	}
+	$: if (board) update_validity_board()
 
-	$: if (browser) {
-		window.localStorage.setItem("actions", JSON.stringify(actions))
-	}
+	// FUNCTIONS
 
-	function reset(confirm = false) {
-		if (confirm) {
+	function reset(options: { confirm: boolean } = { confirm: false }) {
+		if (options.confirm) {
 			$popup = {
 				text: "Do you really want to reset the game?",
 				action: reset
@@ -108,7 +111,6 @@
 		$selected_coord = null
 		$error_message = ""
 		actions = []
-		can_undo = false
 	}
 
 	function load_new_board() {
@@ -159,7 +161,6 @@
 		}
 
 		actions = actions
-		can_undo = true
 
 		if (is_solved(board)) {
 			$popup = { text: "Solved!", action: null }
@@ -186,7 +187,6 @@
 		} else if (type === ACTION_TYPE.CANDIDATE) {
 			candidate_board[coord] = prev
 		}
-		if (actions.length === 0) can_undo = false
 		actions = actions
 	}
 
@@ -196,10 +196,6 @@
 
 	function handle_click(e: MouseEvent) {
 		if (!app?.contains(e.target as HTMLElement)) $selected_coord = null
-	}
-
-	$: if (board) {
-		update_validity_board()
 	}
 
 	function update_validity_board() {
@@ -245,6 +241,8 @@
 		}
 	}
 
+	// LIFECYCLE FUNCTIONS
+
 	onMount(() => {
 		if (browser) document.addEventListener("click", handle_click)
 	})
@@ -253,6 +251,8 @@
 		if (browser) document.removeEventListener("click", handle_click)
 	})
 </script>
+
+<!-- COMPONENTS -->
 
 <svelte:window on:keydown={handle_keydown} />
 
@@ -269,7 +269,7 @@
 		<Popup />
 
 		<Menu
-			on:reset={() => reset(true)}
+			on:reset={() => reset({ confirm: true })}
 			on:new={load_new_board}
 			on:digit={(e) => set_digit(e.detail)}
 			on:undo={undo}

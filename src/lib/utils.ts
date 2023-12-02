@@ -1,3 +1,4 @@
+import { browser } from "$app/environment"
 import { LINE_REGEXP, coordinates } from "./config"
 import { peers_dict } from "./peers"
 
@@ -70,4 +71,17 @@ export function shuffle_line(line: string): string {
 		shuffled_line += String(digits[Number(char)])
 	}
 	return shuffled_line
+}
+
+export function get_stored_value<T>(options: { key: string; default: T }): T {
+	if (browser) {
+		const stored_string = window.localStorage.getItem(options.key)
+		if (stored_string) return JSON.parse(stored_string)
+	}
+	return options.default
+}
+
+export function store_value<T>(options: { key: string; value: T }): void {
+	if (!browser) return
+	window.localStorage.setItem(options.key, JSON.stringify(options.value))
 }
