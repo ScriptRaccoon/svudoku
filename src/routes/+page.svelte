@@ -37,15 +37,33 @@
 	$: creating = $page.data.creating
 
 	let board: Record<string, number> = Object.assign({}, original)
+
+	if (browser && window.localStorage.getItem("board")) {
+		board = JSON.parse(window.localStorage.getItem("board")!)
+	}
+
 	let candidate_board: Record<string, string> = Object.fromEntries(
 		coordinates.map((coord) => [coord, ""])
 	)
+
+	if (browser && window.localStorage.getItem("candidate_board")) {
+		candidate_board = JSON.parse(
+			window.localStorage.getItem("candidate_board")!
+		)
+	}
+
 	let validity_board: Record<string, boolean> = Object.fromEntries(
 		coordinates.map((coord) => [coord, true])
 	)
 
-	let actions: string[] = []
 	let can_undo = false
+	let actions: string[] = []
+
+	if (browser && window.localStorage.getItem("actions")) {
+		actions = JSON.parse(window.localStorage.getItem("actions")!)
+		if (actions.length > 0) can_undo = true
+	}
+
 	let app: HTMLElement
 
 	$: can_place_digit = $selected_coord
@@ -56,6 +74,21 @@
 	$: if ($page.data.original != original) {
 		original = $page.data.original
 		reset()
+	}
+
+	$: if (browser) {
+		window.localStorage.setItem("board", JSON.stringify(board))
+	}
+
+	$: if (browser) {
+		window.localStorage.setItem(
+			"candidate_board",
+			JSON.stringify(candidate_board)
+		)
+	}
+
+	$: if (browser) {
+		window.localStorage.setItem("actions", JSON.stringify(actions))
 	}
 
 	function reset(confirm = false) {
@@ -125,6 +158,7 @@
 			}
 		}
 
+		actions = actions
 		can_undo = true
 
 		if (is_solved(board)) {
@@ -153,6 +187,7 @@
 			candidate_board[coord] = prev
 		}
 		if (actions.length === 0) can_undo = false
+		actions = actions
 	}
 
 	function toggle_candidates() {
