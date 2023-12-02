@@ -12,3 +12,4 @@ https://svudoku.netlify.app
 - undo every step
 - create your own Sudoku puzzles
 - shareable URLs
+- game state is saved in localStorage
